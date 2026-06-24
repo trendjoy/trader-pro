@@ -1,8 +1,8 @@
-export default function Page() {
+export default function Home() {
   return (
-    <main style={{ padding: 20 }}>
-      <h1>🔥 Trader Pro rodando na Vercel</h1>
-      <p>Dashboard iniciado com sucesso</p>
-    </main>
-  )
+    <div style={{ padding: 20 }}>
+      <h1>📊 Trader Pro Dashboard</h1>
+      <p>Sistema rodando com sucesso 🚀</p>
+    </div>
+  );
 }
