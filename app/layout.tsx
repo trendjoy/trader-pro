@@ -1,16 +1,13 @@
-export const metadata = {
-  title: "Trader Pro",
-  description: "Trading Dashboard"
-}
-
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
-      <body>{children}</body>
+    <html lang="pt-br">
+      <body style={{ margin: 0, fontFamily: "Arial" }}>
+        {children}
+      </body>
     </html>
-  )
+  );
 }
