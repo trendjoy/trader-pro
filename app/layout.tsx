@@ -11,3 +11,8 @@ export default function RootLayout({
     </html>
   );
 }
+import { redirect } from "next/navigation";
+
+export default function Home() {
+  redirect("/dashboard");
+}
