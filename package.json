@@ -13,3 +13,8 @@
     "@supabase/supabase-js": "latest"
   }
 }
+"devDependencies": {
+  "typescript": "latest",
+  "@types/react": "latest",
+  "@types/node": "latest"
+}
