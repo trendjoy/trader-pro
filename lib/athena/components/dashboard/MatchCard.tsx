@@ -1,3 +1,5 @@
+import { Card } from "./Card";
+
 interface MatchCardProps {
   homeTeam: string;
   awayTeam: string;
@@ -10,13 +12,7 @@ export function MatchCard({
   minute,
 }: MatchCardProps) {
   return (
-    <div
-      style={{
-        background: "#1e293b",
-        borderRadius: 16,
-        padding: 24,
-      }}
-    >
+    <Card>
       <div
         style={{
           color: "#94a3b8",
@@ -28,14 +24,23 @@ export function MatchCard({
 
       <h2
         style={{
-          marginTop: 10,
-          marginBottom: 10,
+          marginTop: 12,
+          marginBottom: 12,
+          fontSize: 28,
         }}
       >
-        {homeTeam} x {awayTeam}
+        {homeTeam} × {awayTeam}
       </h2>
 
-      <h1>{minute}'</h1>
-    </div>
+      <div
+        style={{
+          fontSize: 56,
+          fontWeight: 700,
+          color: "#38bdf8",
+        }}
+      >
+        {minute}'
+      </div>
+    </Card>
   );
 }

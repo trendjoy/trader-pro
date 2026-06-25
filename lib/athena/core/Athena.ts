@@ -1,13 +1,11 @@
 import { FootballAnalyzer } from "../analyzers/football-analyzer";
-import { LiveMatch } from "../match/live-match";
+import { MatchSnapshot } from "../models/match-snapshot";
 
 export class Athena {
 
   private readonly footballAnalyzer = new FootballAnalyzer();
 
-  public analyze(match: LiveMatch) {
-
-    const snapshot = match.snapshotState();
+  public analyze(snapshot: MatchSnapshot) {
 
     return this.footballAnalyzer.analyze(snapshot);
 

@@ -3,7 +3,10 @@
 import { useMemo } from "react";
 
 import { Athena } from "../lib/athena/core/Athena";
+
 import { useMatchSimulation } from "../lib/athena/hooks/useMatchSimulation";
+import { useFootballFixtures } from "../lib/athena/hooks/useFootballFixtures";
+import { useSelectedFixture } from "../lib/athena/hooks/useSelectedFixture";
 
 import { Dashboard } from "../lib/athena/components/dashboard/Dashboard";
 import { MatchCard } from "../lib/athena/components/dashboard/MatchCard";
@@ -12,35 +15,60 @@ import { OpportunityCard } from "../lib/athena/components/dashboard/OpportunityC
 import { InsightCard } from "../lib/athena/components/dashboard/InsightCard";
 import { SimulationControls } from "../lib/athena/components/dashboard/SimulationControls";
 import { SimulationTimeline } from "../lib/athena/components/dashboard/SimulationTimeline";
+import { FixtureList } from "../lib/athena/components/dashboard/FixtureList";
 
 export default function HomePage() {
 
   const simulation = useMatchSimulation();
 
+  const fixtures = useFootballFixtures();
+
+  const {
+    selectedFixture,
+    selectFixture,
+  } = useSelectedFixture();
+
   const athena = useMemo(() => new Athena(), []);
 
-  const intelligence = athena.analyze(simulation.match);
-
   const snapshot = simulation.match.snapshotState();
+
+  const intelligence = athena.analyze(snapshot);
 
   const events = [
     ...snapshot.homeEvents,
     ...snapshot.awayEvents,
   ].sort((a, b) => {
+
     if (a.minute !== b.minute) {
+
       return a.minute - b.minute;
+
     }
 
     return a.second - b.second;
+
   });
 
   return (
+
     <Dashboard>
 
       <MatchCard
-        minute={snapshot.minute}
-        homeTeam={snapshot.homeTeam}
-        awayTeam={snapshot.awayTeam}
+        minute={
+          selectedFixture
+            ? selectedFixture.status.minute
+            : snapshot.minute
+        }
+        homeTeam={
+          selectedFixture
+            ? selectedFixture.home.name
+            : snapshot.homeTeam
+        }
+        awayTeam={
+          selectedFixture
+            ? selectedFixture.away.name
+            : snapshot.awayTeam
+        }
       />
 
       <SimulationControls
@@ -76,16 +104,25 @@ export default function HomePage() {
       />
 
       <InsightCard
-        insight={`Time dominante: ${
-          intelligence.dominantTeam ?? "EMPATE"
-        }`}
+        insight={
+          selectedFixture
+            ? `${selectedFixture.league.name} • ${selectedFixture.status.long}`
+            : `Time dominante: ${intelligence.dominantTeam ?? "EMPATE"}`
+        }
       />
 
       <SimulationTimeline
         events={events}
       />
 
+      <FixtureList
+        fixtures={fixtures}
+        selectedFixture={selectedFixture}
+        onSelect={selectFixture}
+      />
+
     </Dashboard>
+
   );
 
 }

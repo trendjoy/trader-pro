@@ -1,3 +1,7 @@
+import { Card } from "./Card";
+import { ProgressBar } from "./ProgressBar";
+import { StatusBadge } from "./StatusBadge";
+
 interface PressureCardProps {
   title: string;
   score: number;
@@ -10,13 +14,8 @@ export function PressureCard({
   level,
 }: PressureCardProps) {
   return (
-    <div
-      style={{
-        background: "#1e293b",
-        borderRadius: 16,
-        padding: 24,
-      }}
-    >
+    <Card>
+
       <div
         style={{
           color: "#94a3b8",
@@ -28,21 +27,17 @@ export function PressureCard({
 
       <h1
         style={{
-          fontSize: 48,
-          margin: "16px 0 8px",
+          fontSize: 54,
+          margin: "12px 0",
         }}
       >
         {score}
       </h1>
 
-      <div
-        style={{
-          color: "#22c55e",
-          fontWeight: "bold",
-        }}
-      >
-        {level}
-      </div>
-    </div>
+      <StatusBadge value={level} />
+
+      <ProgressBar value={score} />
+
+    </Card>
   );
 }

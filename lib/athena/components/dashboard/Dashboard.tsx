@@ -8,39 +8,48 @@ export function Dashboard({ children }: DashboardProps) {
   return (
     <main
       style={{
-        background: "#0f172a",
         minHeight: "100vh",
+        background: "#020617",
+        color: "#ffffff",
         padding: 32,
-        color: "#fff",
-        fontFamily: "Arial, sans-serif",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
-      <h1
+      <header
         style={{
-          fontSize: 42,
-          marginBottom: 10,
+          marginBottom: 32,
         }}
       >
-        ATHENA
-      </h1>
+        <h1
+          style={{
+            fontSize: 42,
+            fontWeight: 700,
+            margin: 0,
+          }}
+        >
+          ATHENA
+        </h1>
 
-      <p
-        style={{
-          color: "#94a3b8",
-          marginBottom: 40,
-        }}
-      >
-        Football Intelligence Platform
-      </p>
+        <p
+          style={{
+            color: "#94a3b8",
+            marginTop: 8,
+          }}
+        >
+          Football Intelligence Platform
+        </p>
+      </header>
 
-      <div
+      <section
         style={{
           display: "grid",
-          gap: 20,
+          gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+          gap: 24,
+          alignItems: "start",
         }}
       >
         {children}
-      </div>
+      </section>
     </main>
   );
 }

@@ -3,81 +3,84 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { MatchSimulator } from "../simulator/MatchSimulator";
+import { Athena } from "../core/Athena";
 
 export function useMatchSimulation() {
 
-    const simulator = useMemo(() => {
+  const simulator = useMemo(() => new MatchSimulator(), []);
 
-        return new MatchSimulator();
+  const athena = useMemo(() => new Athena(), []);
 
-    }, []);
+  const [, forceUpdate] = useState(0);
 
-    const [, forceUpdate] = useState(0);
+  const [running, setRunning] = useState(false);
 
-    const [running, setRunning] = useState(false);
+  useEffect(() => {
 
-    useEffect(() => {
+    if (!running) return;
 
-        if (!running) {
+    const interval = setInterval(() => {
 
-            return;
+      simulator.tick();
 
-        }
+      forceUpdate(v => v + 1);
 
-        const interval = setInterval(() => {
+    }, 1000);
 
-            simulator.tick();
+    return () => clearInterval(interval);
 
-            forceUpdate(v => v + 1);
+  }, [running, simulator]);
 
-        }, 1000);
+  function start() {
 
-        return () => clearInterval(interval);
+    simulator.start();
 
-    }, [running, simulator]);
+    setRunning(true);
 
-    function start() {
+  }
 
-        simulator.start();
+  function pause() {
 
-        setRunning(true);
+    simulator.stop();
 
-    }
+    setRunning(false);
 
-    function pause() {
+  }
 
-        simulator.stop();
+  function reset() {
 
-        setRunning(false);
+    simulator.reset();
 
-    }
+    setRunning(false);
 
-    function reset() {
+    forceUpdate(v => v + 1);
 
-        simulator.reset();
+  }
 
-        setRunning(false);
+  const match = simulator.getMatch();
 
-        forceUpdate(v => v + 1);
+  const snapshot = match.snapshotState();
 
-    }
+  const intelligence = athena.analyze(snapshot);
 
-    return {
+  return {
 
-        running,
+    running,
 
-        start,
+    start,
 
-        pause,
+    pause,
 
-        reset,
+    reset,
 
-        simulator,
+    match,
 
-        match: simulator.getMatch(),
+    snapshot,
 
-        clock: simulator.getClock()
+    intelligence,
 
-    };
+    clock: simulator.getClock(),
+
+  };
 
 }

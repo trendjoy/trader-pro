@@ -29,16 +29,19 @@ export class LiveMatch {
 
   }
 
+  loadSnapshot(snapshot: MatchSnapshot) {
+
+    this.snapshot = snapshot;
+
+  }
+
   addHomeEvent(event: MatchEvent) {
 
     this.snapshot.homeEvents.push(event);
 
     this.snapshot.minute = Math.max(
-
       this.snapshot.minute,
-
       event.minute
-
     );
 
   }
@@ -48,11 +51,8 @@ export class LiveMatch {
     this.snapshot.awayEvents.push(event);
 
     this.snapshot.minute = Math.max(
-
       this.snapshot.minute,
-
       event.minute
-
     );
 
   }
