@@ -1,18 +1,26 @@
+import type { ReactNode } from "react";
+
+export const metadata = {
+  title: "ATHENA",
+  description: "ATHENA - Football Intelligence",
+};
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <html lang="pt-br">
-      <body style={{ margin: 0, fontFamily: "Arial" }}>
+    <html lang="pt-BR">
+      <body
+        style={{
+          margin: 0,
+          fontFamily: "Arial, sans-serif",
+          background: "#0f172a",
+        }}
+      >
         {children}
       </body>
     </html>
   );
-}
-import { redirect } from "next/navigation";
-
-export default function Home() {
-  redirect("/dashboard");
 }
