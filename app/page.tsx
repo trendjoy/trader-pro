@@ -3,133 +3,89 @@
 import { useMemo } from "react";
 
 import { Athena } from "../lib/athena/core/Athena";
-import { LiveMatch } from "../lib/athena/match/live-match";
-
-import {
-  EventType,
-  MatchEvent,
-} from "../lib/athena/models/match-event";
-
-import { TeamSide } from "../lib/athena/types/team-side";
+import { useMatchSimulation } from "../lib/athena/hooks/useMatchSimulation";
 
 import { Dashboard } from "../lib/athena/components/dashboard/Dashboard";
 import { MatchCard } from "../lib/athena/components/dashboard/MatchCard";
 import { PressureCard } from "../lib/athena/components/dashboard/PressureCard";
 import { OpportunityCard } from "../lib/athena/components/dashboard/OpportunityCard";
 import { InsightCard } from "../lib/athena/components/dashboard/InsightCard";
+import { SimulationControls } from "../lib/athena/components/dashboard/SimulationControls";
+import { SimulationTimeline } from "../lib/athena/components/dashboard/SimulationTimeline";
 
 export default function HomePage() {
 
-  const intelligence = useMemo(() => {
+  const simulation = useMatchSimulation();
 
-    const athena = new Athena();
+  const athena = useMemo(() => new Athena(), []);
 
-    const match = new LiveMatch();
+  const intelligence = athena.analyze(simulation.match);
 
-    const events: MatchEvent[] = [
+  const snapshot = simulation.match.snapshotState();
 
-      {
-        id: crypto.randomUUID(),
-        minute:61,
-        second:10,
-        team:TeamSide.HOME,
-        type:EventType.ATTACK
-      },
+  const events = [
+    ...snapshot.homeEvents,
+    ...snapshot.awayEvents,
+  ].sort((a, b) => {
+    if (a.minute !== b.minute) {
+      return a.minute - b.minute;
+    }
 
-      {
-        id: crypto.randomUUID(),
-        minute:62,
-        second:5,
-        team:TeamSide.HOME,
-        type:EventType.DANGER_ATTACK
-      },
+    return a.second - b.second;
+  });
 
-      {
-        id: crypto.randomUUID(),
-        minute:63,
-        second:12,
-        team:TeamSide.HOME,
-        type:EventType.CORNER
-      },
-
-      {
-        id: crypto.randomUUID(),
-        minute:64,
-        second:18,
-        team:TeamSide.HOME,
-        type:EventType.SHOT_ON_TARGET
-      }
-
-    ];
-
-    events.forEach(e=>match.addHomeEvent(e));
-
-    return athena.analyze(match);
-
-  },[]);
-
-  return(
-
+  return (
     <Dashboard>
 
       <MatchCard
+        minute={snapshot.minute}
+        homeTeam={snapshot.homeTeam}
+        awayTeam={snapshot.awayTeam}
+      />
 
-        homeTeam="Liverpool"
-
-        awayTeam="Arsenal"
-
-        minute={intelligence.minute}
-
+      <SimulationControls
+        running={simulation.running}
+        onStart={simulation.start}
+        onPause={simulation.pause}
+        onReset={simulation.reset}
       />
 
       <PressureCard
-
-        title="PRESSÃO HOME"
-
+        title="Mandante"
         score={intelligence.homePressure.score}
-
         level={intelligence.homePressure.level}
-
       />
 
       <PressureCard
-
-        title="PRESSÃO AWAY"
-
+        title="Visitante"
         score={intelligence.awayPressure.score}
-
         level={intelligence.awayPressure.level}
-
       />
 
       <OpportunityCard
-
-        strategy="Lay Draw"
-
-        confidence={0.91}
-
+        strategy={
+          intelligence.dominantTeam
+            ? `Pressão ${intelligence.dominantTeam}`
+            : "Sem oportunidade"
+        }
+        confidence={intelligence.confidence}
         reason={[
-
-          "Mandante domina a partida",
-
-          "Pressão ofensiva crescente",
-
-          "Visitante não responde",
-
-          "Mercado ainda não ajustou"
-
+          "Análise baseada na pressão ofensiva",
+          "Atualização em tempo real",
         ]}
-
       />
 
       <InsightCard
+        insight={`Time dominante: ${
+          intelligence.dominantTeam ?? "EMPATE"
+        }`}
+      />
 
-        insight="O ATHENA detectou uma sequência ofensiva consistente do mandante. O contexto atual favorece estratégias pró-mandante, porém a decisão continua sendo do trader."
-
+      <SimulationTimeline
+        events={events}
       />
 
     </Dashboard>
-
   );
 
 }

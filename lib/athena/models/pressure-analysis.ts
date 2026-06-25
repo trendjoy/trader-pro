@@ -6,11 +6,7 @@ export enum PressureLevel {
 }
 
 export interface PressureAnalysis {
-
   score: number;
-
   level: PressureLevel;
-
   confidence: number;
-
 }
