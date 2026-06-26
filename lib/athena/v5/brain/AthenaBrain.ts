@@ -57,6 +57,9 @@ export class AthenaBrain {
 
       match:{
 
+        id:
+          Number(snapshot.id ?? 0),
+
         home:
           snapshot.homeName ?? "",
 
@@ -71,6 +74,9 @@ export class AthenaBrain {
 
         minute:
           snapshot.minute ?? 0,
+
+        status:
+          snapshot.status ?? "LIVE",
 
       },
 
