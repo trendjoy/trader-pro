@@ -158,6 +158,11 @@ export function useLiveAnalysis() {
 
   }
 
+console.log("========== ATHENA ==========");
+console.log("fixture:", selectedFixture);
+console.log("analysis:", analysis);
+console.log("============================");
+
   return {
 
     loading,

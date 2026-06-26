@@ -1,4 +1,7 @@
 import { MatchState } from "../models/MatchState";
+import { FeatureExtractor } from "../features/FeatureExtractor";
+import { pressureModifier } from "../intelligence/PressureContext";
+
 
 export enum PressureLevel {
 
@@ -32,9 +35,17 @@ export interface PressureResult {
 
 export class PressureEngine {
 
+  private readonly featureExtractor =
+    new FeatureExtractor();
+
+
   analyze(
     state: MatchState
   ): PressureResult {
+
+    const features = this.featureExtractor.extract(state);
+
+    const modifier = pressureModifier(features);
 
     const homeScore =
       this.calculateScore(
