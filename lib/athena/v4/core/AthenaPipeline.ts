@@ -89,7 +89,20 @@ export class AthenaPipeline {
         opportunity
       );
 
-    return {
+    console.log("===== PIPELINE =====");
+
+console.table({
+homePressure:pressure.home.score,
+awayPressure:pressure.away.score,
+homeMomentum:momentum.home.score,
+awayMomentum:momentum.away.score,
+homeThreat:threat.home.score,
+awayThreat:threat.away.score,
+dominance:dominance.dominantSide,
+goalProbability:goalProbability.probability
+});
+
+return {
 
       minute:
         snapshot.minute,

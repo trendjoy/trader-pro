@@ -36,6 +36,8 @@ export default function AthenaV4Page() {
 
       fixture={live.selectedFixture}
 
+      fixtures={live.fixtures}
+
     />
 
   );

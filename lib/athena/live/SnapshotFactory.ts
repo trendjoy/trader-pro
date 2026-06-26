@@ -10,7 +10,13 @@ export class SnapshotFactory {
     data: LiveMatchData
   ): MatchSnapshot {
 
-    return {
+    console.log("===== LIVE DATA =====");
+console.dir(data,{depth:null});
+
+console.log("===== RAW STATISTICS =====");
+console.dir(data.statistics,{depth:null});
+
+return {
 
       id: String(data.fixture.id),
 

@@ -21,6 +21,8 @@ interface DashboardProps{
 
  fixture:any;
 
+ fixtures:any[];
+
 }
 
 export default function Dashboard({
@@ -28,6 +30,8 @@ export default function Dashboard({
  analysis,
 
  fixture,
+
+ fixtures,
 
 }:DashboardProps){
 
@@ -50,7 +54,13 @@ export default function Dashboard({
 
    />
 
-   <MainLayout>
+   <MainLayout
+
+    fixture={fixture}
+
+    fixtures={fixtures}
+
+   >
 
     <div
      style={{
@@ -63,6 +73,8 @@ export default function Dashboard({
      <MatchCard
       home={fixture.home.name}
       away={fixture.away.name}
+      homeScore={fixture.score.home}
+      awayScore={fixture.score.away}
       minute={analysis.minute}
      />
 

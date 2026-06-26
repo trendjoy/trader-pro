@@ -7,6 +7,10 @@ interface Props {
 
   away: string;
 
+  homeScore: number;
+
+  awayScore: number;
+
   minute: number;
 
 }
@@ -17,6 +21,10 @@ export default function MatchCard({
 
   away,
 
+  homeScore,
+
+  awayScore,
+
   minute,
 
 }: Props) {
@@ -26,15 +34,15 @@ export default function MatchCard({
     <Card title="Current Match">
 
       <Metric
-        value={`${home} × ${away}`}
+        value={`${home} ${homeScore} × ${awayScore} ${away}`}
       />
 
       <div
         style={{
-          marginTop: 20,
-          fontSize: 52,
-          fontWeight: 800,
-          color: "#38bdf8",
+          marginTop:20,
+          fontSize:52,
+          fontWeight:800,
+          color:"#38bdf8",
         }}
       >
 

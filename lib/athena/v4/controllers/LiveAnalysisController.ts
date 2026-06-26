@@ -69,6 +69,9 @@ export class LiveAnalysisController {
         liveMatch
       );
 
+console.log("===== SNAPSHOT =====");
+console.dir(snapshot,{depth:null});
+
     return this.pipeline.analyze(
       snapshot
     );
