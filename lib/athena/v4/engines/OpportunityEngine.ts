@@ -1,4 +1,5 @@
 import { MatchState } from "../models/MatchState";
+
 import { DominanceResult } from "./DominanceEngine";
 import { GoalProbabilityResult } from "./GoalProbabilityEngine";
 
@@ -6,19 +7,19 @@ export enum OpportunityType {
 
   NONE = "NONE",
 
-  HOME_ATTACK = "HOME_ATTACK",
+  LAY_DRAW = "LAY_DRAW",
 
-  AWAY_ATTACK = "AWAY_ATTACK",
+  BACK_HOME = "BACK_HOME",
 
-  HOME_DOMINANCE = "HOME_DOMINANCE",
+  BACK_AWAY = "BACK_AWAY",
 
-  AWAY_DOMINANCE = "AWAY_DOMINANCE",
+  OVER_15 = "OVER_15",
 
-  GOAL_EXPECTATION = "GOAL_EXPECTATION",
+  OVER_25 = "OVER_25",
 
-  HIGH_PRESSURE = "HIGH_PRESSURE",
+  UNDER_25 = "UNDER_25",
 
-  LOW_TEMPO = "LOW_TEMPO",
+  WAIT = "WAIT",
 
 }
 
@@ -40,23 +41,25 @@ export class OpportunityEngine {
 
     dominance: DominanceResult,
 
-    goalProbability: GoalProbabilityResult
+    goal: GoalProbabilityResult
 
   ): Opportunity {
 
     const reasons: string[] = [];
 
+    /*
+     * Mercado sem valor
+     */
+
     if (
 
-      goalProbability.probability < 35 &&
-
-      dominance.level === "BALANCED"
+      goal.probability < 45
 
     ) {
 
       reasons.push(
 
-        "Poucas ações ofensivas"
+        "Probabilidade de gol muito baixa"
 
       );
 
@@ -64,9 +67,9 @@ export class OpportunityEngine {
 
         type:
 
-          OpportunityType.LOW_TEMPO,
+          OpportunityType.WAIT,
 
-        confidence: 0.60,
+        confidence: 0.30,
 
         reasons,
 
@@ -74,15 +77,35 @@ export class OpportunityEngine {
 
     }
 
+    /*
+     * Lay Draw
+     */
+
     if (
 
-      goalProbability.probability >= 70
+      goal.probability >= 80 &&
+
+      state.home.score ===
+
+      state.away.score
 
     ) {
 
       reasons.push(
 
-        "Alta expectativa de gol"
+        "Alta probabilidade de gol"
+
+      );
+
+      reasons.push(
+
+        "Partida empatada"
+
+      );
+
+      reasons.push(
+
+        "Mercado Lay Draw"
 
       );
 
@@ -90,11 +113,11 @@ export class OpportunityEngine {
 
         type:
 
-          OpportunityType.GOAL_EXPECTATION,
+          OpportunityType.LAY_DRAW,
 
         confidence:
 
-          goalProbability.confidence,
+          goal.confidence,
 
         reasons,
 
@@ -102,15 +125,25 @@ export class OpportunityEngine {
 
     }
 
+    /*
+     * Back Home
+     */
+
     if (
 
-      dominance.dominantSide === "HOME"
+      goal.expectedSide === "HOME"
 
     ) {
 
       reasons.push(
 
-        "Mandante controla o jogo"
+        "Mandante domina a partida"
+
+      );
+
+      reasons.push(
+
+        "Próximo gol esperado do mandante"
 
       );
 
@@ -118,11 +151,11 @@ export class OpportunityEngine {
 
         type:
 
-          OpportunityType.HOME_DOMINANCE,
+          OpportunityType.BACK_HOME,
 
         confidence:
 
-          dominance.confidence,
+          goal.confidence,
 
         reasons,
 
@@ -130,15 +163,25 @@ export class OpportunityEngine {
 
     }
 
+    /*
+     * Back Away
+     */
+
     if (
 
-      dominance.dominantSide === "AWAY"
+      goal.expectedSide === "AWAY"
 
     ) {
 
       reasons.push(
 
-        "Visitante controla o jogo"
+        "Visitante domina a partida"
+
+      );
+
+      reasons.push(
+
+        "Próximo gol esperado do visitante"
 
       );
 
@@ -146,11 +189,11 @@ export class OpportunityEngine {
 
         type:
 
-          OpportunityType.AWAY_DOMINANCE,
+          OpportunityType.BACK_AWAY,
 
         confidence:
 
-          dominance.confidence,
+          goal.confidence,
 
         reasons,
 
@@ -158,17 +201,27 @@ export class OpportunityEngine {
 
     }
 
+    /*
+     * Over 2.5
+     */
+
     if (
 
-      state.home.shots +
+      goal.probability >= 75 &&
 
-      state.away.shots >= 10
+      state.minute <= 70
 
     ) {
 
       reasons.push(
 
-        "Grande volume ofensivo"
+        "Grande expectativa ofensiva"
+
+      );
+
+      reasons.push(
+
+        "Tempo suficiente"
 
       );
 
@@ -176,9 +229,83 @@ export class OpportunityEngine {
 
         type:
 
-          OpportunityType.HIGH_PRESSURE,
+          OpportunityType.OVER_25,
 
-        confidence: 0.75,
+        confidence:
+
+          goal.confidence,
+
+        reasons,
+
+      };
+
+    }
+
+    /*
+     * Over 1.5
+     */
+
+    if (
+
+      goal.probability >= 65
+
+    ) {
+
+      reasons.push(
+
+        "Boa expectativa de gol"
+
+      );
+
+      return {
+
+        type:
+
+          OpportunityType.OVER_15,
+
+        confidence:
+
+          goal.confidence,
+
+        reasons,
+
+      };
+
+    }
+
+    /*
+     * Under 2.5
+     */
+
+    if (
+
+      goal.probability <= 30 &&
+
+      state.minute >= 60
+
+    ) {
+
+      reasons.push(
+
+        "Baixa produção ofensiva"
+
+      );
+
+      reasons.push(
+
+        "Jogo controlado"
+
+      );
+
+      return {
+
+        type:
+
+          OpportunityType.UNDER_25,
+
+        confidence:
+
+          0.70,
 
         reasons,
 
@@ -196,7 +323,7 @@ export class OpportunityEngine {
 
       reasons: [
 
-        "Nenhuma oportunidade identificada"
+        "Nenhuma oportunidade encontrada"
 
       ],
 

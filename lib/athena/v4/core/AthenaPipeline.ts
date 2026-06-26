@@ -73,6 +73,7 @@ export class AthenaPipeline {
         state,
         pressure,
         momentum,
+        threat,
         dominance
       );
 

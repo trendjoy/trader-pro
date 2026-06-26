@@ -1,7 +1,10 @@
 import { MatchState } from "../models/MatchState";
+
 import { PressureResult } from "./PressureEngine";
 import { MomentumResult } from "./MomentumEngine";
 import { DominanceResult } from "./DominanceEngine";
+
+import { ThreatResult } from "../models/ThreatResult";
 
 export enum GoalProbabilityLevel {
 
@@ -23,7 +26,10 @@ export interface GoalProbabilityResult {
 
   level: GoalProbabilityLevel;
 
-  expectedSide: "HOME" | "AWAY" | "NONE";
+  expectedSide:
+    | "HOME"
+    | "AWAY"
+    | "NONE";
 
   confidence: number;
 
@@ -41,55 +47,74 @@ export class GoalProbabilityEngine {
 
     momentum: MomentumResult,
 
+    threat: ThreatResult,
+
     dominance: DominanceResult
 
   ): GoalProbabilityResult {
 
+    const minuteFactor =
+      this.calculateMinuteFactor(
+        state.minute
+      );
+
+    const homeDominance =
+
+      dominance.dominantSide === "HOME"
+
+        ? dominance.score
+
+        : 0;
+
+    const awayDominance =
+
+      dominance.dominantSide === "AWAY"
+
+        ? dominance.score
+
+        : 0;
+
     const homeScore =
 
-      pressure.home.score * 0.35 +
+      pressure.home.score * 0.25 +
 
-      momentum.home.score * 0.25 +
+      momentum.home.score * 0.20 +
 
-      state.home.shotsOnTarget * 8 +
+      threat.home.score * 0.35 +
 
-      state.home.shots * 4 +
+      homeDominance * 0.15 +
 
-      state.home.corners * 2 +
-
-      state.home.possession * 0.20;
+      minuteFactor;
 
     const awayScore =
 
-      pressure.away.score * 0.35 +
+      pressure.away.score * 0.25 +
 
-      momentum.away.score * 0.25 +
+      momentum.away.score * 0.20 +
 
-      state.away.shotsOnTarget * 8 +
+      threat.away.score * 0.35 +
 
-      state.away.shots * 4 +
+      awayDominance * 0.15 +
 
-      state.away.corners * 2 +
-
-      state.away.possession * 0.20;
+      minuteFactor;
 
     let expectedSide:
       "HOME" | "AWAY" | "NONE" = "NONE";
 
-    let strongest =
-      Math.max(
-        homeScore,
-        awayScore
-      );
-
     if (
+
       Math.abs(
+
         homeScore -
+
         awayScore
-      ) >= 8
+
+      ) >= 5
+
     ) {
 
       expectedSide =
+
         homeScore > awayScore
 
           ? "HOME"
@@ -98,74 +123,146 @@ export class GoalProbabilityEngine {
 
     }
 
-    let probability =
-      Math.round(
-        Math.min(
-          95,
-          strongest
-        )
-      );
+    const probability =
 
-    if (
-      state.minute >= 75
-    ) {
-
-      probability += 5;
-
-    }
-
-    if (
-      state.minute >= 85
-    ) {
-
-      probability += 5;
-
-    }
-
-    probability =
       Math.min(
+
         99,
-        probability
+
+        Math.round(
+
+          Math.max(
+
+            homeScore,
+
+            awayScore
+
+          )
+
+        )
+
       );
 
-    let level =
-      GoalProbabilityLevel.VERY_LOW;
+    return {
+
+      probability,
+
+      expectedSide,
+
+      confidence:
+        probability / 100,
+
+      level:
+        this.calculateLevel(
+          probability
+        ),
+
+      reasons:
+        this.buildReasons(
+
+          state,
+
+          pressure,
+
+          momentum,
+
+          threat,
+
+          dominance
+
+        ),
+
+    };
+
+  }
+
+  private calculateMinuteFactor(
+    minute: number
+  ): number {
+
+    let factor = 0;
 
     if (
-      probability >= 25
+      minute >= 60
     ) {
 
-      level =
-        GoalProbabilityLevel.LOW;
+      factor += 2;
 
     }
 
     if (
-      probability >= 45
+      minute >= 75
     ) {
 
-      level =
-        GoalProbabilityLevel.MEDIUM;
+      factor += 3;
 
     }
 
     if (
-      probability >= 65
+      minute >= 85
     ) {
 
-      level =
-        GoalProbabilityLevel.HIGH;
+      factor += 5;
+
+    }
+
+    return factor;
+
+  }
+
+  private calculateLevel(
+    probability: number
+  ): GoalProbabilityLevel {
+
+    if (
+      probability >= 80
+    ) {
+
+      return GoalProbabilityLevel.VERY_HIGH;
 
     }
 
     if (
-      probability >= 85
+      probability >= 60
     ) {
 
-      level =
-        GoalProbabilityLevel.VERY_HIGH;
+      return GoalProbabilityLevel.HIGH;
 
     }
+
+    if (
+      probability >= 40
+    ) {
+
+      return GoalProbabilityLevel.MEDIUM;
+
+    }
+
+    if (
+      probability >= 20
+    ) {
+
+      return GoalProbabilityLevel.LOW;
+
+    }
+
+    return GoalProbabilityLevel.VERY_LOW;
+
+  }
+
+  private buildReasons(
+
+    state: MatchState,
+
+    pressure: PressureResult,
+
+    momentum: MomentumResult,
+
+    threat: ThreatResult,
+
+    dominance: DominanceResult
+
+  ): string[] {
 
     const reasons: string[] = [];
 
@@ -174,7 +271,7 @@ export class GoalProbabilityEngine {
     ) {
 
       reasons.push(
-        "Pressão dominante"
+        "Pressão ofensiva dominante"
       );
 
     }
@@ -184,7 +281,27 @@ export class GoalProbabilityEngine {
     ) {
 
       reasons.push(
-        "Momento ofensivo"
+        "Momentum crescente"
+      );
+
+    }
+
+    if (
+      threat.home.level === "CRITICAL"
+    ) {
+
+      reasons.push(
+        "Ameaça crítica do mandante"
+      );
+
+    }
+
+    if (
+      threat.away.level === "CRITICAL"
+    ) {
+
+      reasons.push(
+        "Ameaça crítica do visitante"
       );
 
     }
@@ -200,30 +317,27 @@ export class GoalProbabilityEngine {
     }
 
     if (
-      state.home.shotsOnTarget +
-      state.away.shotsOnTarget >= 5
+      state.minute >= 75
     ) {
 
       reasons.push(
-        "Volume de finalizações"
+        "Minutos finais da partida"
       );
 
     }
 
-    return {
+    if (
+      state.home.score ===
+      state.away.score
+    ) {
 
-      probability,
+      reasons.push(
+        "Partida empatada"
+      );
 
-      expectedSide,
+    }
 
-      confidence:
-        probability / 100,
-
-      level,
-
-      reasons,
-
-    };
+    return reasons;
 
   }
 

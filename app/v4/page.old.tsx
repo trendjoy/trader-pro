@@ -20,7 +20,7 @@ export default function AthenaV4Page() {
     return (
       <main className={styles.page}>
         <h1>ATHENA 4.0</h1>
-        <p>Nenhuma partida disponível.</p>
+        <p>Nenhuma partida encontrada.</p>
       </main>
     );
   }
@@ -33,84 +33,69 @@ export default function AthenaV4Page() {
       <div className={styles.container}>
 
         <header className={styles.header}>
-          <div className={styles.title}>
-            ATHENA 4.0
-          </div>
-
-          <div className={styles.subtitle}>
+          <h1 className={styles.title}>ATHENA 4.0</h1>
+          <p className={styles.subtitle}>
             Football Intelligence Platform
-          </div>
+          </p>
         </header>
 
         <section className={styles.match}>
-
-          <div>
-            <div className={styles.teams}>
-              {fixture.home.name} × {fixture.away.name}
-            </div>
+          <div className={styles.teams}>
+            {fixture.home.name} × {fixture.away.name}
           </div>
 
           <div className={styles.minute}>
             {analysis.minute}'
           </div>
-
         </section>
 
         <section className={styles.grid}>
 
-          <MetricCard
+          <Metric
             title="HOME PRESSURE"
             value={analysis.home.pressure}
             label={analysis.home.pressureLevel}
           />
 
-          <MetricCard
+          <Metric
             title="AWAY PRESSURE"
             value={analysis.away.pressure}
             label={analysis.away.pressureLevel}
           />
 
-          <MetricCard
-            title="DOMINANCE"
-            value={analysis.goal.probability}
-            label={analysis.dominantSide}
-          />
-
-          <MetricCard
+          <Metric
             title="HOME MOMENTUM"
             value={analysis.home.momentum}
             label={analysis.home.momentumLevel}
           />
 
-          <MetricCard
+          <Metric
             title="AWAY MOMENTUM"
             value={analysis.away.momentum}
             label={analysis.away.momentumLevel}
           />
 
-          <MetricCard
-            title="GOAL PROBABILITY"
-            value={analysis.goal.probability}
-            label={analysis.goal.expectedSide}
-          />
-
-          <MetricCard
+          <Metric
             title="HOME THREAT"
             value={analysis.home.threat}
             label={analysis.home.threatLevel}
           />
 
-          <MetricCard
+          <Metric
             title="AWAY THREAT"
             value={analysis.away.threat}
             label={analysis.away.threatLevel}
           />
 
-          <MetricCard
+          <Metric
+            title="GOAL"
+            value={analysis.goal.probability}
+            label={analysis.goal.expectedSide}
+          />
+
+          <Metric
             title="TRADING"
-            value={Math.round(
-              analysis.trading.confidence * 100
-            )}
+            value={Math.round(analysis.trading.confidence * 100)}
             label={analysis.trading.action}
           />
 
@@ -120,29 +105,15 @@ export default function AthenaV4Page() {
               ATHENA COACH
             </div>
 
-            <div className={styles.coach}>
-
-              <strong>
-                Oportunidade:
-              </strong>
-
-              <br />
-
+            <p className={styles.coach}>
               {analysis.opportunity.type}
+            </p>
 
-              <br /><br />
-
-              <strong>
-                Motivos
-              </strong>
-
-              <ul className={styles.list}>
-                {analysis.opportunity.reasons.map((r, i) => (
-                  <li key={i}>{r}</li>
-                ))}
-              </ul>
-
-            </div>
+            <ul className={styles.list}>
+              {analysis.opportunity.reasons.map((reason, index) => (
+                <li key={index}>{reason}</li>
+              ))}
+            </ul>
 
           </div>
 
@@ -151,21 +122,21 @@ export default function AthenaV4Page() {
       </div>
     </main>
   );
+
 }
 
-interface MetricCardProps {
-  title: string;
-  value: number;
-  label: string;
-}
-
-function MetricCard({
+function Metric({
   title,
   value,
   label,
-}: MetricCardProps) {
+}: {
+  title: string;
+  value: number;
+  label: string;
+}) {
 
   return (
+
     <div className={styles.card}>
 
       <div className={styles.cardTitle}>
@@ -190,6 +161,7 @@ function MetricCard({
       </div>
 
     </div>
+
   );
 
 }
