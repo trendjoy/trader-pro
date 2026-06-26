@@ -15,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
@@ -24,7 +24,6 @@
         "./*"
       ]
     },
-    "ignoreDeprecations": "6.0",
     "plugins": [
       {
         "name": "next"
