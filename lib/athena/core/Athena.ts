@@ -35,6 +35,22 @@ export class Athena {
         state
       );
 
+    const dominantTeam =
+      pressure.dominantSide;
+
+    const confidence =
+      Math.max(
+
+        pressure.home.score,
+
+        pressure.away.score,
+
+        momentum.home.score,
+
+        momentum.away.score
+
+      ) / 100;
+
     return {
 
       minute:
@@ -45,6 +61,26 @@ export class Athena {
       pressure,
 
       momentum,
+
+      /*
+       * Compatibilidade com a Home antiga
+       */
+
+      homePressure:
+        pressure.home,
+
+      awayPressure:
+        pressure.away,
+
+      homeMomentum:
+        momentum.home,
+
+      awayMomentum:
+        momentum.away,
+
+      dominantTeam,
+
+      confidence,
 
     };
 

@@ -1,20 +1,26 @@
+import { ThreatLevel } from "./ThreatAnalysis";
+
 export interface TeamAnalysis {
 
   pressure: number;
 
   pressureLevel:
-    "LOW" |
-    "MEDIUM" |
-    "HIGH" |
-    "EXTREME";
+    | "LOW"
+    | "MEDIUM"
+    | "HIGH"
+    | "EXTREME";
 
   momentum: number;
 
   momentumLevel:
-    "STABLE" |
-    "BUILDING" |
-    "STRONG" |
-    "EXPLOSIVE";
+    | "STABLE"
+    | "BUILDING"
+    | "STRONG"
+    | "EXPLOSIVE";
+
+  threat: number;
+
+  threatLevel: ThreatLevel;
 
 }
 
@@ -23,9 +29,9 @@ export interface GoalAnalysis {
   probability: number;
 
   expectedSide:
-    "HOME" |
-    "AWAY" |
-    "NONE";
+    | "HOME"
+    | "AWAY"
+    | "NONE";
 
 }
 
@@ -62,16 +68,14 @@ export interface MatchAnalysis {
   away: TeamAnalysis;
 
   dominantSide:
-    "HOME" |
-    "AWAY" |
-    "NONE";
+    | "HOME"
+    | "AWAY"
+    | "NONE";
 
   goal: GoalAnalysis;
 
-  opportunity:
-    OpportunityAnalysis;
+  opportunity: OpportunityAnalysis;
 
-  trading:
-    TradingAnalysis;
+  trading: TradingAnalysis;
 
 }

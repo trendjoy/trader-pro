@@ -1,24 +1,23 @@
 import { ThreatLevel } from "./ThreatAnalysis";
 
+export interface TeamThreat {
+
+  score: number;
+
+  level: ThreatLevel;
+
+}
+
 export interface ThreatResult {
 
-  home: {
+  home: TeamThreat;
 
-    score: number;
+  away: TeamThreat;
 
-    level: ThreatLevel;
-
-  };
-
-  away: {
-
-    score: number;
-
-    level: ThreatLevel;
-
-  };
-
-  dominantSide: "HOME" | "AWAY" | "NONE";
+  dominantSide:
+    | "HOME"
+    | "AWAY"
+    | "NONE";
 
   confidence: number;
 

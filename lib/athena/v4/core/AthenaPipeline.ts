@@ -4,6 +4,7 @@ import { MatchStateAnalyzer } from "../analysis/MatchStateAnalyzer";
 
 import { PressureEngine } from "../engines/PressureEngine";
 import { MomentumEngine } from "../engines/MomentumEngine";
+import { ThreatEngine } from "../engines/ThreatEngine";
 import { DominanceEngine } from "../engines/DominanceEngine";
 import { GoalProbabilityEngine } from "../engines/GoalProbabilityEngine";
 import { OpportunityEngine } from "../engines/OpportunityEngine";
@@ -21,6 +22,9 @@ export class AthenaPipeline {
 
   private readonly momentumEngine =
     new MomentumEngine();
+
+  private readonly threatEngine =
+    new ThreatEngine();
 
   private readonly dominanceEngine =
     new DominanceEngine();
@@ -53,6 +57,11 @@ export class AthenaPipeline {
         state
       );
 
+    const threat =
+      this.threatEngine.analyze(
+        state
+      );
+
     const dominance =
       this.dominanceEngine.analyze(
         pressure,
@@ -79,7 +88,7 @@ export class AthenaPipeline {
         opportunity
       );
 
-    const analysis: MatchAnalysis = {
+    return {
 
       minute:
         snapshot.minute,
@@ -98,6 +107,12 @@ export class AthenaPipeline {
         momentumLevel:
           momentum.home.level,
 
+        threat:
+          threat.home.score,
+
+        threatLevel:
+          threat.home.level,
+
       },
 
       away: {
@@ -113,6 +128,12 @@ export class AthenaPipeline {
 
         momentumLevel:
           momentum.away.level,
+
+        threat:
+          threat.away.score,
+
+        threatLevel:
+          threat.away.level,
 
       },
 
@@ -162,8 +183,6 @@ export class AthenaPipeline {
       },
 
     };
-
-    return analysis;
 
   }
 

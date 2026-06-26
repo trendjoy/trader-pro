@@ -1,226 +1,325 @@
 import { MatchState } from "../models/MatchState";
 
 import {
-  ThreatAnalysis,
   ThreatLevel,
 } from "../models/ThreatAnalysis";
+
+import {
+  ThreatResult,
+} from "../models/ThreatResult";
+
+export interface TeamThreat {
+
+  score: number;
+
+  level: ThreatLevel;
+
+}
 
 export class ThreatEngine {
 
   analyze(
     state: MatchState
-  ): ThreatAnalysis {
+  ): ThreatResult {
 
-    let score = 0;
+    const homeScore =
+      this.calculateThreat(
 
-    const reasons: string[] = [];
+        state.home.possession,
 
-    /*
-     * POSSE
-     */
+        state.home.shots,
 
-    const possession = Math.max(
+        state.home.shotsOnTarget,
 
-      state.home.possession,
+        state.home.corners,
 
-      state.away.possession
+        state.home.score,
 
-    );
+        state.minute
 
-    if (possession >= 60) {
-
-      score += 15;
-
-      reasons.push(
-        "Posse dominante"
       );
 
-    }
+    const awayScore =
+      this.calculateThreat(
 
-    /*
-     * FINALIZAÇÕES
-     */
+        state.away.possession,
 
-    const shots = Math.max(
+        state.away.shots,
 
-      state.home.shots,
+        state.away.shotsOnTarget,
 
-      state.away.shots
+        state.away.corners,
 
-    );
+        state.away.score,
 
-    score += Math.min(
+        state.minute
 
-      shots * 3,
-
-      24
-
-    );
-
-    if (shots >= 8) {
-
-      reasons.push(
-        "Grande volume de finalizações"
       );
-
-    }
-
-    /*
-     * CHUTES NO GOL
-     */
-
-    const shotsOnTarget = Math.max(
-
-      state.home.shotsOnTarget,
-
-      state.away.shotsOnTarget
-
-    );
-
-    score += Math.min(
-
-      shotsOnTarget * 6,
-
-      30
-
-    );
-
-    if (shotsOnTarget >= 3) {
-
-      reasons.push(
-        "Finalizações perigosas"
-      );
-
-    }
-
-    /*
-     * ESCANTEIOS
-     */
-
-    const corners = Math.max(
-
-      state.home.corners,
-
-      state.away.corners
-
-    );
-
-    score += Math.min(
-
-      corners * 2,
-
-      10
-
-    );
-
-    if (corners >= 4) {
-
-      reasons.push(
-        "Pressão por escanteios"
-      );
-
-    }
-
-    /*
-     * MOMENTO DO JOGO
-     */
-
-    if (state.minute >= 70) {
-
-      score += 10;
-
-      reasons.push(
-        "Minutos finais"
-      );
-
-    }
-
-    /*
-     * EMPATE
-     */
-
-    if (
-
-      state.home.score ===
-
-      state.away.score
-
-    ) {
-
-      score += 10;
-
-      reasons.push(
-        "Jogo empatado"
-      );
-
-    }
-
-    /*
-     * DOMÍNIO
-     */
-
-    if (
-
-      state.dominantSide !== "NONE"
-
-    ) {
-
-      score += 10;
-
-      reasons.push(
-        "Domínio territorial"
-      );
-
-    }
-
-    /*
-     * LIMITA SCORE
-     */
-
-    score = Math.min(
-
-      score,
-
-      100
-
-    );
-
-    let level =
-      ThreatLevel.LOW;
-
-    if (score >= 85) {
-
-      level =
-        ThreatLevel.CRITICAL;
-
-    }
-
-    else if (score >= 65) {
-
-      level =
-        ThreatLevel.HIGH;
-
-    }
-
-    else if (score >= 40) {
-
-      level =
-        ThreatLevel.MEDIUM;
-
-    }
 
     return {
 
-      score,
+      home: {
 
-      level,
+        score: homeScore,
+
+        level:
+          this.calculateLevel(
+            homeScore
+          ),
+
+      },
+
+      away: {
+
+        score: awayScore,
+
+        level:
+          this.calculateLevel(
+            awayScore
+          ),
+
+      },
+
+      dominantSide:
+        this.calculateDominantSide(
+
+          homeScore,
+
+          awayScore
+
+        ),
 
       confidence:
-        score / 100,
 
-      reasons,
+        Math.max(
+
+          homeScore,
+
+          awayScore
+
+        ) / 100,
+
+      reasons:
+        this.buildReasons(
+
+          state,
+
+          homeScore,
+
+          awayScore
+
+        ),
 
     };
+
+  }
+
+  private calculateThreat(
+
+    possession: number,
+
+    shots: number,
+
+    shotsOnTarget: number,
+
+    corners: number,
+
+    goals: number,
+
+    minute: number
+
+  ): number {
+
+    let score = 0;
+
+    score +=
+      possession * 0.20;
+
+    score +=
+      shots * 7;
+
+    score +=
+      shotsOnTarget * 18;
+
+    score +=
+      corners * 4;
+
+    score +=
+      goals * 10;
+
+    if (
+      minute >= 70
+    ) {
+
+      score *= 1.08;
+
+    }
+
+    if (
+      minute >= 85
+    ) {
+
+      score *= 1.15;
+
+    }
+
+    score =
+      Math.max(
+        0,
+        score
+      );
+
+    score =
+      Math.min(
+        100,
+        Math.round(score)
+      );
+
+    return score;
+
+  }
+
+  private calculateLevel(
+    score: number
+  ): ThreatLevel {
+
+    if (
+      score >= 80
+    ) {
+
+      return ThreatLevel.CRITICAL;
+
+    }
+
+    if (
+      score >= 60
+    ) {
+
+      return ThreatLevel.HIGH;
+
+    }
+
+    if (
+      score >= 35
+    ) {
+
+      return ThreatLevel.MEDIUM;
+
+    }
+
+    return ThreatLevel.LOW;
+
+  }
+
+  private calculateDominantSide(
+
+    home: number,
+
+    away: number
+
+  ): "HOME" | "AWAY" | "NONE" {
+
+    if (
+      Math.abs(
+        home - away
+      ) < 8
+    ) {
+
+      return "NONE";
+
+    }
+
+    return home > away
+
+      ? "HOME"
+
+      : "AWAY";
+
+  }
+
+  private buildReasons(
+
+    state: MatchState,
+
+    homeScore: number,
+
+    awayScore: number
+
+  ): string[] {
+
+    const reasons: string[] = [];
+
+    if (
+      state.home.shotsOnTarget >= 3
+    ) {
+
+      reasons.push(
+        "Mandante finaliza com perigo"
+      );
+
+    }
+
+    if (
+      state.away.shotsOnTarget >= 3
+    ) {
+
+      reasons.push(
+        "Visitante finaliza com perigo"
+      );
+
+    }
+
+    if (
+      state.home.corners >= 5
+    ) {
+
+      reasons.push(
+        "Mandante pressiona em escanteios"
+      );
+
+    }
+
+    if (
+      state.away.corners >= 5
+    ) {
+
+      reasons.push(
+        "Visitante pressiona em escanteios"
+      );
+
+    }
+
+    if (
+      state.minute >= 75
+    ) {
+
+      reasons.push(
+        "Jogo entrando na fase decisiva"
+      );
+
+    }
+
+    if (
+      homeScore >= 80
+    ) {
+
+      reasons.push(
+        "Ameaça crítica do mandante"
+      );
+
+    }
+
+    if (
+      awayScore >= 80
+    ) {
+
+      reasons.push(
+        "Ameaça crítica do visitante"
+      );
+
+    }
+
+    return reasons;
 
   }
 
