@@ -1,9 +1,28 @@
-import { MatchSnapshot } from "../models/match-snapshot";
+import { MatchSnapshot } from "../../models/match-snapshot";
 
-import { MatchStateAnalyzer } from "../v4/analysis/MatchStateAnalyzer";
+import { MatchStateAnalyzer } from "../analysis/MatchStateAnalyzer";
 
-import { PressureEngine } from "../v4/engines/PressureEngine";
-import { MomentumEngine } from "../v4/engines/MomentumEngine";
+import {
+  PressureEngine,
+  PressureResult,
+} from "../engines/PressureEngine";
+
+import {
+  MomentumEngine,
+  MomentumResult,
+} from "../engines/MomentumEngine";
+
+export interface AthenaResult {
+
+  snapshot: MatchSnapshot;
+
+  state: ReturnType<MatchStateAnalyzer["analyze"]>;
+
+  pressure: PressureResult;
+
+  momentum: MomentumResult;
+
+}
 
 export class Athena {
 
@@ -18,7 +37,7 @@ export class Athena {
 
   analyze(
     snapshot: MatchSnapshot
-  ) {
+  ): AthenaResult {
 
     const state =
       this.stateAnalyzer.analyze(
@@ -37,8 +56,7 @@ export class Athena {
 
     return {
 
-      minute:
-        state.minute,
+      snapshot,
 
       state,
 

@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest
+) {
 
-  const fixture = request.nextUrl.searchParams.get("fixture");
+  const fixture =
+    request.nextUrl.searchParams.get(
+      "fixture"
+    );
+
+  console.log(
+    "API EVENTS - fixture:",
+    fixture,
+    typeof fixture
+  );
 
   if (!fixture) {
 
@@ -17,49 +28,77 @@ export async function GET(request: NextRequest) {
 
   }
 
-  try {
+  const fixtureId =
+    Number(fixture);
 
-    const response = await fetch(
+  console.log(
+    "API EVENTS - number:",
+    fixtureId
+  );
 
-      `${process.env.API_FOOTBALL_BASE_URL}/fixtures/events?fixture=${fixture}`,
+  if (
+    Number.isNaN(fixtureId)
+  ) {
 
+    return NextResponse.json(
       {
-
-        headers: {
-
-          "x-apisports-key":
-            process.env.API_FOOTBALL_KEY!
-
-        },
-
-        cache: "no-store",
-
+        error:
+          "Fixture inválido."
+      },
+      {
+        status: 400
       }
-
     );
 
-    const json = await response.json();
+  }
 
-    return NextResponse.json(json);
+  try {
+
+    const url =
+      `${process.env.API_FOOTBALL_BASE_URL}/fixtures/events?fixture=${fixtureId}`;
+
+    console.log(
+      "API URL:",
+      url
+    );
+
+    const response =
+      await fetch(
+        url,
+        {
+          headers: {
+            "x-apisports-key":
+              process.env.API_FOOTBALL_KEY!
+          },
+          cache: "no-store",
+        }
+      );
+
+    const json =
+      await response.json();
+
+    console.log(
+      "API RESPONSE:",
+      json
+    );
+
+    return NextResponse.json(
+      json
+    );
 
   } catch (error) {
 
+    console.error(
+      error
+    );
+
     return NextResponse.json(
-
       {
-
-        success: false,
-
         error: String(error)
-
       },
-
       {
-
         status: 500
-
       }
-
     );
 
   }

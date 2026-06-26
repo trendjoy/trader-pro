@@ -1,9 +1,12 @@
-import { Fixture } from "../live/Fixture";
+import { Fixture } from "../../live/Fixture";
 
-import { LiveDataService } from "../services/LiveDataService";
-import { SnapshotFactory } from "../live/SnapshotFactory";
+import { LiveDataService } from "../../services/LiveDataService";
+
+import { SnapshotFactory } from "../../live/SnapshotFactory";
 
 import { AthenaPipeline } from "../core/AthenaPipeline";
+
+import { MatchAnalysis } from "../models/MatchAnalysis";
 
 export class LiveAnalysisController {
 
@@ -30,24 +33,24 @@ export class LiveAnalysisController {
       await this.liveData.loadFixtures();
 
     return (
+
       fixtures.find(
-        fixture => fixture.id === fixtureId
+
+        fixture =>
+          fixture.id === fixtureId
+
       ) ?? null
+
     );
 
   }
 
   async analyzeFixture(
     fixture: Fixture
-  ) {
-
-    alert(
-      `Fixture ID: ${fixture.id}
-
-${fixture.home.name} x ${fixture.away.name}`
-    );
+  ): Promise<MatchAnalysis> {
 
     const liveMatch =
+
       await this.liveData.loadMatch(
         fixture.id
       );
@@ -61,22 +64,14 @@ ${fixture.home.name} x ${fixture.away.name}`
     }
 
     const snapshot =
+
       this.snapshotFactory.create(
         liveMatch
       );
 
-    const intelligence =
-      this.pipeline.analyze(
-        snapshot
-      );
-
-    return {
-
-      snapshot,
-
-      ...intelligence,
-
-    };
+    return this.pipeline.analyze(
+      snapshot
+    );
 
   }
 

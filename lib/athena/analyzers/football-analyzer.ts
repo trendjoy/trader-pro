@@ -3,72 +3,77 @@ import { MatchIntelligence } from "../models/match-intelligence";
 
 import { PressureEngine } from "../engines/PressureEngine";
 import { MomentumEngine } from "../engines/MomentumEngine";
+import { GoalProbabilityEngine } from "../engines/GoalProbabilityEngine";
 
 import { TeamSide } from "../types/team-side";
 
 export class FootballAnalyzer {
 
-  private readonly pressureEngine = new PressureEngine();
+  private readonly pressureEngine =
+    new PressureEngine();
 
-  private readonly momentumEngine = new MomentumEngine();
+  private readonly momentumEngine =
+    new MomentumEngine();
 
-  analyze(snapshot: MatchSnapshot): MatchIntelligence {
+  private readonly goalProbabilityEngine =
+    new GoalProbabilityEngine();
 
-    const homePressure = this.pressureEngine.analyze(
-      snapshot.homeEvents
-    );
+  analyze(
+    snapshot: MatchSnapshot
+  ): MatchIntelligence {
 
-    const awayPressure = this.pressureEngine.analyze(
-      snapshot.awayEvents
-    );
+    const homePressure =
+      this.pressureEngine.analyze(
+        snapshot.homeEvents
+      );
 
-    const homeMomentum = this.momentumEngine.analyze(
-      snapshot.homeEvents
-    );
+    const awayPressure =
+      this.pressureEngine.analyze(
+        snapshot.awayEvents
+      );
 
-    const awayMomentum = this.momentumEngine.analyze(
-      snapshot.awayEvents
-    );
+    const homeMomentum =
+      this.momentumEngine.analyze(
+        snapshot.homeEvents
+      );
 
-    const homeStatisticsScore = this.calculateStatisticsScore(
-      snapshot.homePossession,
-      snapshot.homeShots,
-      snapshot.homeShotsOnTarget,
-      snapshot.homeCorners,
-      snapshot.homeYellowCards
-    );
+    const awayMomentum =
+      this.momentumEngine.analyze(
+        snapshot.awayEvents
+      );
 
-    const awayStatisticsScore = this.calculateStatisticsScore(
-      snapshot.awayPossession,
-      snapshot.awayShots,
-      snapshot.awayShotsOnTarget,
-      snapshot.awayCorners,
-      snapshot.awayYellowCards
-    );
+    const goalProbability =
+      this.goalProbabilityEngine.analyze(
+        snapshot
+      );
 
-    homePressure.score = Math.round(
-      (homePressure.score + homeStatisticsScore) / 2
-    );
+    let dominantTeam:
+      TeamSide | null = null;
 
-    awayPressure.score = Math.round(
-      (awayPressure.score + awayStatisticsScore) / 2
-    );
+    if (
+      homePressure.score >
+      awayPressure.score
+    ) {
 
-    let dominantTeam: TeamSide | null = null;
+      dominantTeam =
+        TeamSide.HOME;
 
-    if (homePressure.score > awayPressure.score) {
+    }
 
-      dominantTeam = TeamSide.HOME;
+    if (
+      awayPressure.score >
+      homePressure.score
+    ) {
 
-    } else if (awayPressure.score > homePressure.score) {
-
-      dominantTeam = TeamSide.AWAY;
+      dominantTeam =
+        TeamSide.AWAY;
 
     }
 
     return {
 
-      minute: snapshot.minute,
+      minute:
+        snapshot.minute,
 
       homePressure,
 
@@ -78,49 +83,26 @@ export class FootballAnalyzer {
 
       awayMomentum,
 
+      goalProbability,
+
       dominantTeam,
 
-      confidence: Math.max(
-        homePressure.confidence,
-        awayPressure.confidence,
-        homeMomentum.confidence,
-        awayMomentum.confidence
-      ),
+      confidence:
+        Math.max(
+
+          homePressure.confidence,
+
+          awayPressure.confidence,
+
+          homeMomentum.confidence,
+
+          awayMomentum.confidence,
+
+          goalProbability.confidence,
+
+        ),
 
     };
-
-  }
-
-  private calculateStatisticsScore(
-
-    possession: number,
-
-    shots: number,
-
-    shotsOnTarget: number,
-
-    corners: number,
-
-    yellowCards: number
-
-  ): number {
-
-    const score =
-
-      possession * 0.25 +
-
-      shots * 2 +
-
-      shotsOnTarget * 8 +
-
-      corners * 4 -
-
-      yellowCards * 2;
-
-    return Math.max(
-      0,
-      Math.min(100, Math.round(score))
-    );
 
   }
 

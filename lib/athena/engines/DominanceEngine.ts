@@ -1,81 +1,70 @@
-import {
-  DominanceAnalysis,
-  DominanceLevel,
-} from "../models/dominance-analysis";
-
-import { TeamSide } from "../types/team-side";
-
-import { PressureAnalysis } from "../models/pressure-analysis";
-import { MomentumAnalysis } from "../models/momentum-analysis";
+import { MatchSnapshot } from "../models/match-snapshot";
+import { Dominance } from "../models/dominance";
 
 export class DominanceEngine {
 
   analyze(
+    snapshot: MatchSnapshot
+  ): Dominance {
 
-    homePressure: PressureAnalysis,
-    awayPressure: PressureAnalysis,
+    const home =
 
-    homeMomentum: MomentumAnalysis,
-    awayMomentum: MomentumAnalysis
+      snapshot.homePossession * 0.20 +
 
-  ): DominanceAnalysis {
+      snapshot.homeShots * 4 +
 
-    const homeScore =
-      homePressure.score +
-      homeMomentum.value;
+      snapshot.homeShotsOnTarget * 8 +
 
-    const awayScore =
-      awayPressure.score +
-      awayMomentum.value;
+      snapshot.homeCorners * 3;
 
-    if (homeScore === awayScore) {
+    const away =
 
-      return {
+      snapshot.awayPossession * 0.20 +
 
-        team: null,
+      snapshot.awayShots * 4 +
 
-        score: 0,
+      snapshot.awayShotsOnTarget * 8 +
 
-        level: DominanceLevel.LOW,
+      snapshot.awayCorners * 3;
 
-        confidence: 0,
+    let dominant:
 
-      };
+      | "HOME"
 
-    }
+      | "AWAY"
 
-    const team =
-      homeScore > awayScore
-        ? TeamSide.HOME
-        : TeamSide.AWAY;
+      | "NONE" = "NONE";
 
-    const score = Math.abs(
+    if (home > away) {
 
-      homeScore - awayScore
+      dominant = "HOME";
 
-    );
+    } else if (away > home) {
 
-    let level = DominanceLevel.LOW;
-
-    if (score >= 80) {
-
-      level = DominanceLevel.HIGH;
-
-    } else if (score >= 40) {
-
-      level = DominanceLevel.MEDIUM;
+      dominant = "AWAY";
 
     }
+
+    const difference =
+      Math.abs(home - away);
 
     return {
 
-      team,
+      home,
 
-      score,
+      away,
 
-      level,
+      dominant,
 
-      confidence: Math.min(1, score / 100),
+      confidence:
+
+        Math.min(
+
+          100,
+
+          difference
+
+        ),
 
     };
 

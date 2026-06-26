@@ -1,4 +1,5 @@
 import { Athena } from "./Athena";
+
 import { StrategyEngine } from "../engines/StrategyEngine";
 import { AthenaCoach } from "../services/AthenaCoach";
 
@@ -17,33 +18,71 @@ export interface PipelineResult {
 
 export class AthenaPipeline {
 
-  private readonly athena = new Athena();
+  private readonly athena =
+    new Athena();
 
-  private readonly strategy = new StrategyEngine();
+  private readonly strategy =
+    new StrategyEngine();
 
-  private readonly coach = new AthenaCoach();
+  private readonly coach =
+    new AthenaCoach();
 
-  analyze(snapshot: MatchSnapshot): PipelineResult {
+  analyze(
+    snapshot: MatchSnapshot
+  ): PipelineResult {
 
-    const intelligence = this.athena.analyze(snapshot);
+    const intelligence =
+      this.athena.analyze(
+        snapshot
+      );
 
-    const signal = this.strategy.analyze({
+    const dominantTeam =
+      intelligence.state.dominantSide;
 
-      type: intelligence.dominantTeam
-        ? "LAY_DRAW" as any
-        : "NONE" as any,
+    const confidence =
+      Math.min(
 
-      confidence: intelligence.confidence,
+        1,
 
-      reason: [
+        (
 
-        "Pipeline integrada",
+          intelligence.pressure.home.score +
 
-      ],
+          intelligence.pressure.away.score +
 
-    });
+          intelligence.momentum.home.score +
 
-    const insight = this.coach.explain(intelligence);
+          intelligence.momentum.away.score
+
+        ) / 400
+
+      );
+
+    const signal =
+      this.strategy.analyze({
+
+        type:
+
+          dominantTeam !== "NONE"
+
+            ? "LAY_DRAW" as any
+
+            : "NONE" as any,
+
+        confidence,
+
+        reason: [
+
+          "Pipeline integrada",
+
+        ],
+
+      });
+
+    const insight =
+      this.coach.explain(
+        intelligence as any
+      );
 
     return {
 
