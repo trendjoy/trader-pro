@@ -1,12 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-
-import { Athena } from "../lib/athena/core/Athena";
-
 import { useMatchSimulation } from "../lib/athena/hooks/useMatchSimulation";
-import { useFootballFixtures } from "../lib/athena/hooks/useFootballFixtures";
-import { useSelectedFixture } from "../lib/athena/hooks/useSelectedFixture";
+import { useLiveAnalysis } from "../lib/athena/hooks/useLiveAnalysis";
 
 import { Dashboard } from "../lib/athena/components/dashboard/Dashboard";
 import { MatchCard } from "../lib/athena/components/dashboard/MatchCard";
@@ -21,22 +16,22 @@ export default function HomePage() {
 
   const simulation = useMatchSimulation();
 
-  const fixtures = useFootballFixtures();
+  const live = useLiveAnalysis();
 
-  const {
-    selectedFixture,
-    selectFixture,
-  } = useSelectedFixture();
+  const snapshot =
+    live.snapshot ??
+    simulation.snapshot;
 
-  const athena = useMemo(() => new Athena(), []);
-
-  const snapshot = simulation.match.snapshotState();
-
-  const intelligence = athena.analyze(snapshot);
+  const intelligence =
+    live.intelligence ??
+    simulation.intelligence;
 
   const events = [
+
     ...snapshot.homeEvents,
+
     ...snapshot.awayEvents,
+
   ].sort((a, b) => {
 
     if (a.minute !== b.minute) {
@@ -54,21 +49,9 @@ export default function HomePage() {
     <Dashboard>
 
       <MatchCard
-        minute={
-          selectedFixture
-            ? selectedFixture.status.minute
-            : snapshot.minute
-        }
-        homeTeam={
-          selectedFixture
-            ? selectedFixture.home.name
-            : snapshot.homeTeam
-        }
-        awayTeam={
-          selectedFixture
-            ? selectedFixture.away.name
-            : snapshot.awayTeam
-        }
+        minute={snapshot.minute}
+        homeTeam={snapshot.homeTeam}
+        awayTeam={snapshot.awayTeam}
       />
 
       <SimulationControls
@@ -98,16 +81,15 @@ export default function HomePage() {
         }
         confidence={intelligence.confidence}
         reason={[
-          "Análise baseada na pressão ofensiva",
+          "Pipeline ATHENA",
           "Atualização em tempo real",
         ]}
       />
 
       <InsightCard
         insight={
-          selectedFixture
-            ? `${selectedFixture.league.name} • ${selectedFixture.status.long}`
-            : `Time dominante: ${intelligence.dominantTeam ?? "EMPATE"}`
+          live.insight ??
+          `Time dominante: ${intelligence.dominantTeam ?? "EMPATE"}`
         }
       />
 
@@ -116,9 +98,9 @@ export default function HomePage() {
       />
 
       <FixtureList
-        fixtures={fixtures}
-        selectedFixture={selectedFixture}
-        onSelect={selectFixture}
+        fixtures={live.fixtures}
+        selectedFixture={live.selectedFixture}
+        onSelect={live.selectFixture}
       />
 
     </Dashboard>

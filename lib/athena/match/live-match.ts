@@ -23,15 +23,29 @@ export class LiveMatch {
 
       homeEvents: [],
 
-      awayEvents: []
+      awayEvents: [],
+
+      homePossession: 50,
+
+      awayPossession: 50,
+
+      homeShots: 0,
+
+      awayShots: 0,
+
+      homeShotsOnTarget: 0,
+
+      awayShotsOnTarget: 0,
+
+      homeCorners: 0,
+
+      awayCorners: 0,
+
+      homeYellowCards: 0,
+
+      awayYellowCards: 0,
 
     };
-
-  }
-
-  loadSnapshot(snapshot: MatchSnapshot) {
-
-    this.snapshot = snapshot;
 
   }
 

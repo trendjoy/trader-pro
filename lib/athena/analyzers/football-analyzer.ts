@@ -30,6 +30,30 @@ export class FootballAnalyzer {
       snapshot.awayEvents
     );
 
+    const homeStatisticsScore = this.calculateStatisticsScore(
+      snapshot.homePossession,
+      snapshot.homeShots,
+      snapshot.homeShotsOnTarget,
+      snapshot.homeCorners,
+      snapshot.homeYellowCards
+    );
+
+    const awayStatisticsScore = this.calculateStatisticsScore(
+      snapshot.awayPossession,
+      snapshot.awayShots,
+      snapshot.awayShotsOnTarget,
+      snapshot.awayCorners,
+      snapshot.awayYellowCards
+    );
+
+    homePressure.score = Math.round(
+      (homePressure.score + homeStatisticsScore) / 2
+    );
+
+    awayPressure.score = Math.round(
+      (awayPressure.score + awayStatisticsScore) / 2
+    );
+
     let dominantTeam: TeamSide | null = null;
 
     if (homePressure.score > awayPressure.score) {
@@ -64,6 +88,39 @@ export class FootballAnalyzer {
       ),
 
     };
+
+  }
+
+  private calculateStatisticsScore(
+
+    possession: number,
+
+    shots: number,
+
+    shotsOnTarget: number,
+
+    corners: number,
+
+    yellowCards: number
+
+  ): number {
+
+    const score =
+
+      possession * 0.25 +
+
+      shots * 2 +
+
+      shotsOnTarget * 8 +
+
+      corners * 4 -
+
+      yellowCards * 2;
+
+    return Math.max(
+      0,
+      Math.min(100, Math.round(score))
+    );
 
   }
 

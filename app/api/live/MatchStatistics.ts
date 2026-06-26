@@ -1,22 +1,4 @@
-import { MatchEvent } from "./match-event";
-
-export interface MatchSnapshot {
-
-  id: string;
-
-  minute: number;
-
-  homeTeam: string;
-
-  awayTeam: string;
-
-  scoreHome: number;
-
-  scoreAway: number;
-
-  homeEvents: MatchEvent[];
-
-  awayEvents: MatchEvent[];
+export interface MatchStatistics {
 
   homePossession: number;
 
