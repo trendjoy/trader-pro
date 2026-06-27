@@ -1,24 +1,28 @@
-import { AthenaSignal } from "../models/AthenaSignal";
-import { SignalRepository } from "../repository/SignalRepository";
+import { Signal } from "../models/Signal";
 
-export class SignalService {
+import { SignalRepository } from "../repositories/SignalRepository";
 
-  private readonly repository =
+export class SignalService{
+
+  private repository=
+
     new SignalRepository();
 
-  save(
-    signal: AthenaSignal
-  ) {
+  async emit(
 
-    this.repository.save(
+    signal:Signal
+
+  ){
+
+    return this.repository.save(
       signal
     );
 
   }
 
-  load(): AthenaSignal[] {
+  async history(){
 
-    return this.repository.load();
+    return this.repository.list();
 
   }
 

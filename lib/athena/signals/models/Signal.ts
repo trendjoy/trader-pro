@@ -1,33 +1,36 @@
 export interface Signal {
 
-  id: string;
+  fixtureId:number;
 
-  fixtureId: number;
+  league:string;
 
-  date: string;
+  home:string;
 
-  league: string;
+  away:string;
 
-  home: string;
+  minute:number;
 
-  away: string;
+  market:string;
 
-  minute: number;
+  action:string;
 
-  method: string;
+  selection:string;
 
-  market: string;
+  confidence:number;
 
-  confidence: number;
+  stake:number;
 
-  odd: number;
+  odd:number|null;
 
-  stake: number;
+  status:
+    |"PENDING"
+    |"GREEN"
+    |"RED";
 
-  status: "PENDING" | "GREEN" | "RED";
+  result?:string;
 
-  result?: string;
+  profit?:number;
 
-  createdAt: string;
+  analysis:any;
 
 }
