@@ -1,73 +1,56 @@
-import { EventType, MatchEvent } from "../models/match-event";
-import {
-  PressureAnalysis,
-  PressureLevel,
-} from "../models/pressure-analysis";
+import { MatchStatistics } from "../../../app/api/live/MatchStatistics";
 
-export class PressureEngine {
+export interface PressureResult {
 
-  analyze(events: MatchEvent[]): PressureAnalysis {
+  score:number;
 
-    let score = 0;
+  level:"LOW"|"MEDIUM"|"HIGH";
 
-    for (const event of events) {
+}
 
-      switch (event.type) {
+export class PressureEngine{
 
-        case EventType.ATTACK:
-          score += 5;
-          break;
+  calculate(stats:MatchStatistics):PressureResult{
 
-        case EventType.DANGER_ATTACK:
-          score += 10;
-          break;
+    const home=
 
-        case EventType.CORNER:
-          score += 8;
-          break;
+      stats.homePossession*0.35+
 
-        case EventType.SHOT:
-          score += 12;
-          break;
+      stats.homeShots*2+
 
-        case EventType.SHOT_ON_TARGET:
-          score += 20;
-          break;
+      stats.homeShotsOnTarget*6+
 
-        case EventType.GOAL:
-          score += 40;
-          break;
+      stats.homeCorners*2;
 
-        default:
-          break;
+    const away=
 
-      }
+      stats.awayPossession*0.35+
 
-    }
+      stats.awayShots*2+
 
-    let level: PressureLevel = PressureLevel.LOW;
+      stats.awayShotsOnTarget*6+
 
-    if (score >= 100) {
+      stats.awayCorners*2;
 
-      level = PressureLevel.CRITICAL;
+    const score=
 
-    } else if (score >= 70) {
+      Math.max(home,away);
 
-      level = PressureLevel.HIGH;
+    return{
 
-    } else if (score >= 35) {
+      score:Math.round(score),
 
-      level = PressureLevel.MEDIUM;
+      level:
 
-    }
+        score>=80
 
-    return {
+          ?"HIGH"
 
-      score,
+          :score>=45
 
-      level,
+          ?"MEDIUM"
 
-      confidence: Math.min(1, score / 100),
+          :"LOW"
 
     };
 

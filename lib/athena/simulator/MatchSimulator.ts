@@ -1,83 +1,90 @@
 import { LiveMatch } from "../match/live-match";
-import { MatchClock } from "./MatchClock";
-import { EventGenerator } from "./EventGenerator";
+import { MatchEvent, EventType } from "../models/match-event";
 import { TeamSide } from "../types/team-side";
-import { MatchEvent } from "../models/match-event";
 
 export class MatchSimulator {
 
-    private readonly clock = new MatchClock();
+  private match = new LiveMatch();
 
-    private readonly generator = new EventGenerator();
+  private minute = 60;
 
-    private match = new LiveMatch();
+  private running = false;
 
-    start() {
+  start(): void {
+    this.running = true;
+  }
 
-        this.clock.start();
+  stop(): void {
+    this.running = false;
+  }
 
+  reset(): void {
+    this.match = new LiveMatch();
+    this.minute = 60;
+    this.running = false;
+  }
+
+  tick(): void {
+
+    if (!this.running) return;
+
+    this.minute++;
+
+    const event: MatchEvent = {
+
+      id: crypto.randomUUID(),
+
+      minute: this.minute,
+
+      second: Math.floor(Math.random() * 60),
+
+      team:
+        Math.random() > 0.35
+          ? TeamSide.HOME
+          : TeamSide.AWAY,
+
+      type: this.randomEvent(),
+
+    };
+
+    if (event.team === TeamSide.HOME) {
+      this.match.addHomeEvent(event);
+    } else {
+      this.match.addAwayEvent(event);
     }
 
-    stop() {
+  }
 
-        this.clock.stop();
+  getMatch(): LiveMatch {
+    return this.match;
+  }
 
-    }
+  getClock(): string {
 
-    reset() {
+    return `${this.minute}'`;
 
-        this.clock.reset();
+  }
 
-        this.match = new LiveMatch();
+  private randomEvent(): EventType {
 
-    }
+    const events = [
 
-    tick() {
+      EventType.ATTACK,
 
-        this.clock.tick();
+      EventType.DANGER_ATTACK,
 
-        const event = this.generator.generate(
+      EventType.CORNER,
 
-            this.clock.getMinute(),
+      EventType.SHOT,
 
-            this.clock.getSecond()
+      EventType.SHOT_ON_TARGET,
 
-        );
+    ];
 
-        if (!event) {
+    return events[
+      Math.floor(Math.random() * events.length)
+    ];
 
-            return;
-
-        }
-
-        this.addEvent(event);
-
-    }
-
-    private addEvent(event: MatchEvent) {
-
-        if (event.team === TeamSide.HOME) {
-
-            this.match.addHomeEvent(event);
-
-            return;
-
-        }
-
-        this.match.addAwayEvent(event);
-
-    }
-
-    getMatch() {
-
-        return this.match;
-
-    }
-
-    getClock() {
-
-        return this.clock.getTime();
-
-    }
+  }
 
 }
