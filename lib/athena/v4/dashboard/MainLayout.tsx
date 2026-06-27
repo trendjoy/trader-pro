@@ -1,13 +1,15 @@
 import { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 
-interface Props{
+interface Props {
 
-  children:ReactNode;
+  children: ReactNode;
 
-  fixture:any;
+  fixture: any;
 
-  fixtures:any[];
+  fixtures: any[];
+
+  onSelectFixture: (fixture: any) => void;
 
 }
 
@@ -19,16 +21,18 @@ export default function MainLayout({
 
   fixtures,
 
-}:Props){
+  onSelectFixture,
 
-  return(
+}: Props) {
+
+  return (
 
     <div
       style={{
-        display:"grid",
-        gridTemplateColumns:"1fr 320px",
-        gap:24,
-        alignItems:"start",
+        display: "grid",
+        gridTemplateColumns: "1fr 320px",
+        gap: 24,
+        alignItems: "start",
       }}
     >
 
@@ -39,11 +43,9 @@ export default function MainLayout({
       </section>
 
       <Sidebar
-
         fixture={fixture}
-
         fixtures={fixtures}
-
+        onSelectFixture={onSelectFixture}
       />
 
     </div>

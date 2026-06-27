@@ -1,32 +1,38 @@
-interface Props{
+interface Props {
 
-  fixture:any;
+  fixture: any;
 
-  fixtures:any[];
+  fixtures: any[];
+
+  onSelectFixture: (fixture: any) => void;
 
 }
 
 export default function Sidebar({
 
+  fixture,
+
   fixtures,
 
-}:Props){
+  onSelectFixture,
 
-  return(
+}: Props) {
+
+  return (
 
     <aside
       style={{
-        display:"flex",
-        flexDirection:"column",
-        gap:16,
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
       }}
     >
 
       <div
         style={{
-          background:"#111827",
-          borderRadius:18,
-          padding:20,
+          background: "#111827",
+          borderRadius: 18,
+          padding: 20,
         }}
       >
 
@@ -34,67 +40,66 @@ export default function Sidebar({
 
         <div
           style={{
-            color:"#64748b",
-            marginBottom:20,
+            color: "#64748b",
+            marginBottom: 20,
           }}
         >
           ATHENA Live Monitor
         </div>
 
-        {fixtures.slice(0,5).map((match:any)=>(
+        {fixtures.slice(0, 5).map((match: any) => {
 
-          <div
-            key={match.id}
-            style={{
-              background:"#1f2937",
-              borderRadius:12,
-              padding:14,
-              marginBottom:14,
-            }}
-          >
+          const selected = fixture?.id === match.id;
 
-            <strong>
-
-              {match.home.name}
-
-            </strong>
+          return (
 
             <div
+              key={match.id}
+              onClick={() => {
+  console.log("CLICK:", match.id, match.home.name, "x", match.away.name);
+  onSelectFixture(match);
+}}
               style={{
-                margin:"8px 0",
-                fontSize:18,
-                fontWeight:700,
+                background: selected ? "#0f3d5e" : "#1f2937",
+                border: selected
+                  ? "2px solid #38bdf8"
+                  : "1px solid #374151",
+                cursor: "pointer",
+                borderRadius: 12,
+                padding: 14,
+                marginBottom: 14,
+                transition: "0.2s",
               }}
             >
 
-              {match.score.home}
+              <strong>{match.home.name}</strong>
 
-              {" × "}
+              <div
+                style={{
+                  margin: "8px 0",
+                  fontSize: 18,
+                  fontWeight: 700,
+                }}
+              >
+                {match.score.home} × {match.score.away}
+              </div>
 
-              {match.score.away}
+              <strong>{match.away.name}</strong>
+
+              <div
+                style={{
+                  marginTop: 8,
+                  color: "#94a3b8",
+                }}
+              >
+                {match.status.minute}'
+              </div>
 
             </div>
 
-            <strong>
+          );
 
-              {match.away.name}
-
-            </strong>
-
-            <div
-              style={{
-                marginTop:8,
-                color:"#94a3b8",
-              }}
-            >
-
-              {match.status.minute}'
-
-            </div>
-
-          </div>
-
-        ))}
+        })}
 
       </div>
 

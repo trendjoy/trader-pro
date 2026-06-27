@@ -15,125 +15,124 @@ import TradingCard from "../cards/TradingCard";
 import CoachCard from "../cards/CoachCard";
 import TimelineCard from "../cards/TimelineCard";
 
-interface DashboardProps{
+interface DashboardProps {
 
- analysis:any;
+  analysis: any;
 
- fixture:any;
+  fixture: any;
 
- fixtures:any[];
+  fixtures: any[];
+
+  onSelectFixture: (fixture: any) => void;
 
 }
 
 export default function Dashboard({
 
- analysis,
+  analysis,
 
- fixture,
+  fixture,
 
- fixtures,
+  fixtures,
 
-}:DashboardProps){
+  onSelectFixture,
 
- return(
+}: DashboardProps) {
 
-  <main
-   style={{
-    background:"#050816",
-    minHeight:"100vh",
-    color:"white",
-    padding:30,
-   }}
-  >
+  return (
 
-   <Header
-
-    fixture={fixture}
-
-    minute={analysis.minute}
-
-   />
-
-   <MainLayout
-
-    fixture={fixture}
-
-    fixtures={fixtures}
-
-   >
-
-    <div
-     style={{
-      display:"grid",
-      gridTemplateColumns:"repeat(auto-fit,minmax(340px,1fr))",
-      gap:24,
-     }}
+    <main
+      style={{
+        background:"#050816",
+        minHeight:"100vh",
+        color:"white",
+        padding:30,
+      }}
     >
 
-     <MatchCard
-      home={fixture.home.name}
-      away={fixture.away.name}
-      homeScore={fixture.score.home}
-      awayScore={fixture.score.away}
-      minute={analysis.minute}
-     />
+      <Header
+        fixture={fixture}
+        minute={analysis.minute}
+      />
 
-     <DominanceCard
-      side={analysis.dominantSide}
-      confidence={analysis.trading.confidence}
-     />
+      <MainLayout
+        fixture={fixture}
+        fixtures={fixtures}
+        onSelectFixture={onSelectFixture}
+      >
 
-     <GoalProbabilityCard
-      probability={analysis.goal.probability}
-      expectedSide={analysis.goal.expectedSide}
-     />
+        <div
+          style={{
+            display:"grid",
+            gridTemplateColumns:"repeat(auto-fit,minmax(340px,1fr))",
+            gap:24,
+          }}
+        >
 
-     <OpportunityCard
-      type={analysis.opportunity.type}
-      confidence={analysis.opportunity.confidence}
-      reasons={analysis.opportunity.reasons}
-     />
+          <MatchCard
+            home={fixture.home.name}
+            away={fixture.away.name}
+            homeScore={fixture.score.home}
+            awayScore={fixture.score.away}
+            minute={analysis.minute}
+          />
 
-     <PressureCard
-      home={analysis.home.pressure}
-      away={analysis.away.pressure}
-     />
+          <DominanceCard
+            side={analysis.dominantSide}
+            confidence={analysis.trading.confidence}
+          />
 
-     <MomentumCard
-      home={analysis.home.momentum}
-      away={analysis.away.momentum}
-     />
+          <GoalProbabilityCard
+            probability={analysis.goal.probability}
+            expectedSide={analysis.goal.expectedSide}
+          />
 
-     <ThreatCard
-      home={analysis.home.threat}
-      away={analysis.away.threat}
-     />
+          <OpportunityCard
+            type={analysis.opportunity.type}
+            confidence={analysis.opportunity.confidence}
+            reasons={analysis.opportunity.reasons}
+          />
 
-     <TradingCard
-      market={analysis.trading.market}
-      action={analysis.trading.action}
-      selection={analysis.trading.selection}
-      confidence={analysis.trading.confidence}
-      stake={analysis.trading.stake}
-     />
+          <PressureCard
+            home={analysis.home.pressure}
+            away={analysis.away.pressure}
+          />
 
-     <CoachCard
-      opportunity={analysis.opportunity.type}
-      reasons={analysis.opportunity.reasons}
-     />
+          <MomentumCard
+            home={analysis.home.momentum}
+            away={analysis.away.momentum}
+          />
 
-     <TimelineCard
-      minute={analysis.minute}
-     />
+          <ThreatCard
+            home={analysis.home.threat}
+            away={analysis.away.threat}
+          />
 
-    </div>
+          <TradingCard
+            market={analysis.trading.market}
+            action={analysis.trading.action}
+            selection={analysis.trading.selection}
+            confidence={analysis.trading.confidence}
+            stake={analysis.trading.stake}
+          />
 
-   </MainLayout>
+          <CoachCard
+            opportunity={analysis.opportunity.type}
+            reasons={analysis.opportunity.reasons}
+          />
 
-   <Footer/>
+          <TimelineCard
+            minute={analysis.minute}
+          />
 
-  </main>
+        </div>
 
- );
+      </MainLayout>
+
+      <Footer/>
+
+    </main>
+
+  );
 
 }

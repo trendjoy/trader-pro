@@ -40,31 +40,42 @@ export function useLiveAnalysis() {
   const loadFixtures =
     useCallback(async () => {
 
-      const data =
-        await controller.loadFixtures();
+      try {
 
-      setFixtures(data);
+        const data =
+          await controller.loadFixtures();
 
-      setSelectedFixture(current => {
+        console.log("========== FIXTURES ==========");
+        console.log(data);
+        console.log("==============================");
 
-        if (!current) {
+        setFixtures(data);
 
-          return data[0] ?? null;
+        setSelectedFixture(current => {
 
-        }
+          const selected =
+            !current
+              ? data[0] ?? null
+              : data.find(
+                  fixture =>
+                    fixture.id === current.id
+                ) ?? current;
 
-        return (
+          console.log("========== SELECTED ==========");
+          console.log(selected);
+          console.log("==============================");
 
-          data.find(
+          return selected;
 
-            fixture =>
-              fixture.id === current.id
+        });
 
-          ) ?? current
+      } catch (error) {
 
-        );
+        console.error("========== LOAD FIXTURES ERROR ==========");
+        console.error(error);
+        console.error("=========================================");
 
-      });
+      }
 
     }, [controller]);
 
@@ -89,9 +100,18 @@ export function useLiveAnalysis() {
       .analyzeFixture(
         selectedFixture
       )
-      .then(
-        setAnalysis
-      );
+      .then(result => {
+
+        console.log("ANALYSIS:", result);
+
+        setAnalysis(result);
+
+      })
+      .catch(error => {
+
+        console.error("ANALYZE ERROR:", error);
+
+      });
 
   }, [
 

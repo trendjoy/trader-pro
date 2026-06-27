@@ -136,10 +136,7 @@ export class LiveDataService {
 
     }
 
-   alert(
-  `Fixture: ${fixture.home.name} x ${fixture.away.name}
-Eventos: ${events.length}`
-);
+   
     console.log("================================");
 
     return {

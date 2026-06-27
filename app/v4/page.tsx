@@ -31,13 +31,10 @@ export default function AthenaV4Page() {
   return (
 
     <Dashboard
-
       analysis={live.analysis}
-
       fixture={live.selectedFixture}
-
       fixtures={live.fixtures}
-
+      onSelectFixture={live.selectFixture}
     />
 
   );
