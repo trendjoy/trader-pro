@@ -40,6 +40,7 @@
   ],
   "exclude": [
     "node_modules",
+    "legacy",
     "lib/athena/v5",
     "app/_v5_dev"
   ]
