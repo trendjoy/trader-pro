@@ -5,6 +5,8 @@ import { SnapshotFactory } from "../live/SnapshotFactory";
 
 import { AthenaPipeline } from "../core/AthenaPipeline";
 
+import { SignalRecorder } from "../signals/services/SignalRecorder";
+
 export class LiveAnalysisController {
 
   private readonly liveData =
@@ -15,6 +17,9 @@ export class LiveAnalysisController {
 
   private readonly pipeline =
     new AthenaPipeline();
+
+  private readonly recorder =
+    new SignalRecorder();
 
   async loadFixtures(): Promise<Fixture[]> {
 
@@ -29,23 +34,15 @@ export class LiveAnalysisController {
     const fixtures =
       await this.liveData.loadFixtures();
 
-    return (
-      fixtures.find(
-        fixture => fixture.id === fixtureId
-      ) ?? null
-    );
+    return fixtures.find(
+      fixture => fixture.id === fixtureId
+    ) ?? null;
 
   }
 
   async analyzeFixture(
     fixture: Fixture
   ) {
-
-    alert(
-      `Fixture ID: ${fixture.id}
-
-${fixture.home.name} x ${fixture.away.name}`
-    );
 
     const liveMatch =
       await this.liveData.loadMatch(
@@ -65,16 +62,21 @@ ${fixture.home.name} x ${fixture.away.name}`
         liveMatch
       );
 
-    const intelligence =
+    const result =
       this.pipeline.analyze(
         snapshot
       );
+
+    this.recorder.record(
+      fixture,
+      result
+    );
 
     return {
 
       snapshot,
 
-      ...intelligence,
+      ...result.intelligence,
 
     };
 
