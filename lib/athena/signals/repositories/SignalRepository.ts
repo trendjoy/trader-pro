@@ -1,51 +1,104 @@
 import { supabaseServer } from "@/lib/supabase/server";
-
 import { Signal } from "../models/Signal";
 
 export class SignalRepository {
 
-  async save(
-    signal: Signal
-  ) {
+  async existsPending(
+    fixtureId:number,
+    market:string,
+    action:string,
+    selection:string
+  ){
 
-    console.log("========== SIGNAL ==========");
-    console.dir(signal, { depth: null });
+    const { count,error } = await supabaseServer
 
-    const result = await supabaseServer
+      .from("signals")
+
+      .select("*",{
+        count:"exact",
+        head:true,
+      })
+
+      .eq("fixture_id",fixtureId)
+
+      .eq("market",market)
+
+      .eq("action",action)
+
+      .eq("selection",selection)
+
+      .eq("status","PENDING");
+
+    if(error){
+
+      console.error(error);
+
+      return false;
+
+    }
+
+    return (count ?? 0)>0;
+
+  }
+
+  async save(signal:Signal){
+
+    const duplicated =
+      await this.existsPending(
+
+        signal.fixtureId,
+
+        signal.market,
+
+        signal.action,
+
+        signal.selection
+
+      );
+
+    if(duplicated){
+
+      console.log("SIGNAL ALREADY EXISTS");
+
+      return null;
+
+    }
+
+    return supabaseServer
 
       .from("signals")
 
       .insert({
 
-        fixture_id: signal.fixtureId,
+        fixture_id:signal.fixtureId,
 
-        league: signal.league,
+        league:signal.league,
 
-        home: signal.home,
+        home:signal.home,
 
-        away: signal.away,
+        away:signal.away,
 
-        minute: signal.minute,
+        minute:signal.minute,
 
-        market: signal.market,
+        market:signal.market,
 
-        action: signal.action,
+        action:signal.action,
 
-        selection: signal.selection,
+        selection:signal.selection,
 
-        confidence: signal.confidence,
+        confidence:signal.confidence,
 
-        stake: signal.stake,
+        stake:signal.stake,
 
-        odd: signal.odd,
+        odd:signal.odd,
 
-        status: signal.status,
+        status:signal.status,
 
-        result: signal.result,
+        result:signal.result,
 
-        profit: signal.profit,
+        profit:signal.profit,
 
-        analysis: signal.analysis,
+        analysis:signal.analysis,
 
       })
 
@@ -53,43 +106,58 @@ export class SignalRepository {
 
       .single();
 
-    console.log("========== SUPABASE RESULT ==========");
-    console.dir(result, { depth: null });
-
-    if (result.error) {
-
-      console.error("========== SUPABASE ERROR ==========");
-      console.error(result.error);
-
-    } else {
-
-      console.log("========== SIGNAL SAVED ==========");
-
-    }
-
-    return result;
-
   }
 
-  async list() {
+  async list(){
 
-    const { data, error } = await supabaseServer
+    const {data}=await supabaseServer
 
       .from("signals")
 
       .select("*")
 
-      .order("created_at", {
-        ascending: false,
+      .order("created_at",{
+
+        ascending:false,
+
       });
 
-    if (error) {
+    return data ?? [];
 
-      console.error(error);
+  }
 
-    }
+  async listPending(){
+
+    const {data}=await supabaseServer
+
+      .from("signals")
+
+      .select("*")
+
+      .eq("status","PENDING");
 
     return data ?? [];
+
+  }
+
+  async updateSettlement(
+    id:string,
+    values:any
+  ){
+
+    return supabaseServer
+
+      .from("signals")
+
+      .update({
+
+        ...values,
+
+        settled_at:new Date().toISOString(),
+
+      })
+
+      .eq("id",id);
 
   }
 

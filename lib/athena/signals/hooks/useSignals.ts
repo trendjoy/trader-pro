@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+
 import { SignalStatistics } from "../services/SignalStatistics";
 
 export function useSignals() {
@@ -21,11 +22,20 @@ export function useSignals() {
 
   }, []);
 
-  const summary = statistics.summary();
+  const summary = useMemo(
+
+    () => statistics.summary(signals),
+
+    [signals, statistics]
+
+  );
 
   return {
+
     signals,
+
     summary,
+
   };
 
 }
