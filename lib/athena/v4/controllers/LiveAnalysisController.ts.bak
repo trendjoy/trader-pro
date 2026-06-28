@@ -1,11 +1,12 @@
-import { Fixture } from "../live/Fixture";
+import { Fixture } from "../../live/Fixture";
 
-import { LiveDataService } from "../services/LiveDataService";
-import { SnapshotFactory } from "../live/SnapshotFactory";
+import { LiveDataService } from "../../services/LiveDataService";
+
+import { SnapshotFactory } from "../../live/SnapshotFactory";
 
 import { AthenaPipeline } from "../core/AthenaPipeline";
 
-import { SignalRecorder } from "../signals/services/SignalRecorder";
+import { MatchAnalysis } from "../models/MatchAnalysis";
 
 export class LiveAnalysisController {
 
@@ -17,9 +18,6 @@ export class LiveAnalysisController {
 
   private readonly pipeline =
     new AthenaPipeline();
-
-  private readonly recorder =
-    new SignalRecorder();
 
   async loadFixtures(): Promise<Fixture[]> {
 
@@ -34,17 +32,25 @@ export class LiveAnalysisController {
     const fixtures =
       await this.liveData.loadFixtures();
 
-    return fixtures.find(
-      fixture => fixture.id === fixtureId
-    ) ?? null;
+    return (
+
+      fixtures.find(
+
+        fixture =>
+          fixture.id === fixtureId
+
+      ) ?? null
+
+    );
 
   }
 
   async analyzeFixture(
     fixture: Fixture
-  ) {
+  ): Promise<MatchAnalysis> {
 
     const liveMatch =
+
       await this.liveData.loadMatch(
         fixture.id
       );
@@ -58,27 +64,17 @@ export class LiveAnalysisController {
     }
 
     const snapshot =
+
       this.snapshotFactory.create(
         liveMatch
       );
 
-    const result =
-      this.pipeline.analyze(
-        snapshot
-      );
+console.log("===== SNAPSHOT =====");
+console.dir(snapshot,{depth:null});
 
-    this.recorder.record(
-      fixture,
-      result
+    return this.pipeline.analyze(
+      snapshot
     );
-
-    return {
-
-      snapshot,
-
-      ...result.intelligence,
-
-    };
 
   }
 

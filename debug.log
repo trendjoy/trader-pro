@@ -1,0 +1,634 @@
+
+> dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.0.11.61:3000
+- Environments: .env.local
+✓ Ready in 419ms
+
+[browser] ========== SUPABASE ERROR ========== 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  23 |     if(result.error){
+  24 |
+> 25 |       console.error("========== SUPABASE ERROR ==========");
+     |               ^
+  26 |       console.error(result.error);
+  27 |
+  28 |     }else{ (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+[browser] {
+  code: [32m''[39m,
+  details: [32m'TypeError: Failed to fetch\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6627:23\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6648:20\n'[39m +
+    [32m'    at Generator.next (<anonymous>)\n'[39m +
+    [32m'    at fulfilled (https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6599:32)'[39m,
+  hint: [32m''[39m,
+  message: [32m'TypeError: Failed to fetch'[39m
+} 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  24 |
+  25 |       console.error("========== SUPABASE ERROR ==========");
+> 26 |       console.error(result.error);
+     |               ^
+  27 |
+  28 |     }else{
+  29 | (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+[browser] ========== SUPABASE ERROR ========== 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  23 |     if(result.error){
+  24 |
+> 25 |       console.error("========== SUPABASE ERROR ==========");
+     |               ^
+  26 |       console.error(result.error);
+  27 |
+  28 |     }else{ (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+[browser] {
+  code: [32m''[39m,
+  details: [32m'TypeError: Failed to fetch\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6627:23\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6648:20\n'[39m +
+    [32m'    at Generator.next (<anonymous>)\n'[39m +
+    [32m'    at fulfilled (https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6599:32)'[39m,
+  hint: [32m''[39m,
+  message: [32m'TypeError: Failed to fetch'[39m
+} 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  24 |
+  25 |       console.error("========== SUPABASE ERROR ==========");
+> 26 |       console.error(result.error);
+     |               ^
+  27 |
+  28 |     }else{
+  29 | (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+========== ATHENA ==========
+fixture: null
+analysis: null
+============================
+ GET / 200 in 1926ms (next.js: 1481ms, application-code: 445ms)
+ GET /api/live/fixtures 200 in 249ms (next.js: 66ms, application-code: 183ms)
+ GET /api/live/fixtures 200 in 115ms (next.js: 4ms, application-code: 112ms)
+ GET /api/live/statistics?fixture=1526869 200 in 142ms (next.js: 24ms, application-code: 118ms)
+API EVENTS - fixture: 1526869 string
+API EVENTS - number: 1526869
+API URL: https://v3.football.api-sports.io/fixtures/events?fixture=1526869
+API RESPONSE: {
+  get: 'fixtures/events',
+  parameters: { fixture: '1526869' },
+  errors: [],
+  results: 3,
+  paging: { current: 1, total: 1 },
+  response: [
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    }
+  ]
+}
+ GET /api/live/events?fixture=1526869 200 in 137ms (next.js: 25ms, application-code: 112ms)
+ GET /api/live/fixtures 200 in 133ms (next.js: 3ms, application-code: 130ms)
+ GET /api/live/fixtures 200 in 113ms (next.js: 3ms, application-code: 110ms)
+ GET /api/live/statistics?fixture=1526869 200 in 127ms (next.js: 8ms, application-code: 119ms)
+API EVENTS - fixture: 1526869 string
+API EVENTS - number: 1526869
+API URL: https://v3.football.api-sports.io/fixtures/events?fixture=1526869
+API RESPONSE: {
+  get: 'fixtures/events',
+  parameters: { fixture: '1526869' },
+  errors: [],
+  results: 3,
+  paging: { current: 1, total: 1 },
+  response: [
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    }
+  ]
+}
+ GET /api/live/events?fixture=1526869 200 in 117ms (next.js: 4ms, application-code: 112ms)
+ GET /api/live/fixtures 200 in 134ms (next.js: 2ms, application-code: 132ms)
+ GET /api/live/fixtures 200 in 110ms (next.js: 1815µs, application-code: 108ms)
+ GET /api/live/statistics?fixture=1526869 200 in 126ms (next.js: 2ms, application-code: 124ms)
+API EVENTS - fixture: 1526869 string
+API EVENTS - number: 1526869
+API URL: https://v3.football.api-sports.io/fixtures/events?fixture=1526869
+API RESPONSE: {
+  get: 'fixtures/events',
+  parameters: { fixture: '1526869' },
+  errors: [],
+  results: 3,
+  paging: { current: 1, total: 1 },
+  response: [
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    }
+  ]
+}
+ GET /api/live/events?fixture=1526869 200 in 113ms (next.js: 2ms, application-code: 110ms)
+[browser] ========== SUPABASE ERROR ========== 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  23 |     if(result.error){
+  24 |
+> 25 |       console.error("========== SUPABASE ERROR ==========");
+     |               ^
+  26 |       console.error(result.error);
+  27 |
+  28 |     }else{ (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+[browser] {
+  code: [32m''[39m,
+  details: [32m'TypeError: Failed to fetch\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6627:23\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6648:20\n'[39m +
+    [32m'    at Generator.next (<anonymous>)\n'[39m +
+    [32m'    at fulfilled (https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6599:32)'[39m,
+  hint: [32m''[39m,
+  message: [32m'TypeError: Failed to fetch'[39m
+} 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  24 |
+  25 |       console.error("========== SUPABASE ERROR ==========");
+> 26 |       console.error(result.error);
+     |               ^
+  27 |
+  28 |     }else{
+  29 | (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+[browser] ========== SUPABASE ERROR ========== 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  23 |     if(result.error){
+  24 |
+> 25 |       console.error("========== SUPABASE ERROR ==========");
+     |               ^
+  26 |       console.error(result.error);
+  27 |
+  28 |     }else{ (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+[browser] {
+  code: [32m''[39m,
+  details: [32m'TypeError: Failed to fetch\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6627:23\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6648:20\n'[39m +
+    [32m'    at Generator.next (<anonymous>)\n'[39m +
+    [32m'    at fulfilled (https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6599:32)'[39m,
+  hint: [32m''[39m,
+  message: [32m'TypeError: Failed to fetch'[39m
+} 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  24 |
+  25 |       console.error("========== SUPABASE ERROR ==========");
+> 26 |       console.error(result.error);
+     |               ^
+  27 |
+  28 |     }else{
+  29 | (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+[browser] ========== SUPABASE ERROR ========== 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  23 |     if(result.error){
+  24 |
+> 25 |       console.error("========== SUPABASE ERROR ==========");
+     |               ^
+  26 |       console.error(result.error);
+  27 |
+  28 |     }else{ (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+[browser] {
+  code: [32m''[39m,
+  details: [32m'TypeError: Failed to fetch\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6627:23\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6648:20\n'[39m +
+    [32m'    at Generator.next (<anonymous>)\n'[39m +
+    [32m'    at fulfilled (https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6599:32)'[39m,
+  hint: [32m''[39m,
+  message: [32m'TypeError: Failed to fetch'[39m
+} 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  24 |
+  25 |       console.error("========== SUPABASE ERROR ==========");
+> 26 |       console.error(result.error);
+     |               ^
+  27 |
+  28 |     }else{
+  29 | (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+ GET /api/live/fixtures 200 in 140ms (next.js: 3ms, application-code: 137ms)
+ GET /api/live/statistics?fixture=1489420 200 in 107ms (next.js: 2ms, application-code: 105ms)
+API EVENTS - fixture: 1489420 string
+API EVENTS - number: 1489420
+API URL: https://v3.football.api-sports.io/fixtures/events?fixture=1489420
+API RESPONSE: {
+  get: 'fixtures/events',
+  parameters: { fixture: '1489420' },
+  errors: [],
+  results: 10,
+  paging: { current: 1, total: 1 },
+  response: [
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Goal',
+      detail: 'Normal Goal',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 1',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 2',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 1',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: 'Roughing'
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 3',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 4',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Goal',
+      detail: 'Normal Goal',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 2',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Goal',
+      detail: 'Normal Goal',
+      comments: null
+    }
+  ]
+}
+ GET /api/live/events?fixture=1489420 200 in 113ms (next.js: 2ms, application-code: 111ms)
+[browser] ========== SUPABASE ERROR ========== 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  23 |     if(result.error){
+  24 |
+> 25 |       console.error("========== SUPABASE ERROR ==========");
+     |               ^
+  26 |       console.error(result.error);
+  27 |
+  28 |     }else{ (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+[browser] {
+  code: [32m''[39m,
+  details: [32m'TypeError: Failed to fetch\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6627:23\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6648:20\n'[39m +
+    [32m'    at Generator.next (<anonymous>)\n'[39m +
+    [32m'    at fulfilled (https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6599:32)'[39m,
+  hint: [32m''[39m,
+  message: [32m'TypeError: Failed to fetch'[39m
+} 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  24 |
+  25 |       console.error("========== SUPABASE ERROR ==========");
+> 26 |       console.error(result.error);
+     |               ^
+  27 |
+  28 |     }else{
+  29 | (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+========== ATHENA ==========
+fixture: null
+analysis: null
+============================
+ GET / 200 in 45ms (next.js: 2ms, application-code: 43ms)
+ GET /api/live/fixtures 200 in 127ms (next.js: 3ms, application-code: 124ms)
+ GET /api/live/fixtures 200 in 130ms (next.js: 6ms, application-code: 124ms)
+ GET /api/live/statistics?fixture=1526869 200 in 114ms (next.js: 3ms, application-code: 111ms)
+API EVENTS - fixture: 1526869 string
+API EVENTS - number: 1526869
+API URL: https://v3.football.api-sports.io/fixtures/events?fixture=1526869
+API RESPONSE: {
+  get: 'fixtures/events',
+  parameters: { fixture: '1526869' },
+  errors: [],
+  results: 3,
+  paging: { current: 1, total: 1 },
+  response: [
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: null
+    }
+  ]
+}
+ GET /api/live/events?fixture=1526869 200 in 117ms (next.js: 2ms, application-code: 115ms)
+[browser] ========== SUPABASE ERROR ========== 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  23 |     if(result.error){
+  24 |
+> 25 |       console.error("========== SUPABASE ERROR ==========");
+     |               ^
+  26 |       console.error(result.error);
+  27 |
+  28 |     }else{ (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+[browser] {
+  code: [32m''[39m,
+  details: [32m'TypeError: Failed to fetch\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6627:23\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6648:20\n'[39m +
+    [32m'    at Generator.next (<anonymous>)\n'[39m +
+    [32m'    at fulfilled (https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6599:32)'[39m,
+  hint: [32m''[39m,
+  message: [32m'TypeError: Failed to fetch'[39m
+} 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  24 |
+  25 |       console.error("========== SUPABASE ERROR ==========");
+> 26 |       console.error(result.error);
+     |               ^
+  27 |
+  28 |     }else{
+  29 | (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+ GET /api/live/fixtures 200 in 107ms (next.js: 1850µs, application-code: 105ms)
+ GET /api/live/statistics?fixture=1489420 200 in 112ms (next.js: 4ms, application-code: 107ms)
+API EVENTS - fixture: 1489420 string
+API EVENTS - number: 1489420
+API URL: https://v3.football.api-sports.io/fixtures/events?fixture=1489420
+API RESPONSE: {
+  get: 'fixtures/events',
+  parameters: { fixture: '1489420' },
+  errors: [],
+  results: 10,
+  paging: { current: 1, total: 1 },
+  response: [
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Goal',
+      detail: 'Normal Goal',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 1',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 2',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 1',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Card',
+      detail: 'Yellow Card',
+      comments: 'Roughing'
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 3',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 4',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Goal',
+      detail: 'Normal Goal',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'subst',
+      detail: 'Substitution 2',
+      comments: null
+    },
+    {
+      time: [Object],
+      team: [Object],
+      player: [Object],
+      assist: [Object],
+      type: 'Goal',
+      detail: 'Normal Goal',
+      comments: null
+    }
+  ]
+}
+ GET /api/live/events?fixture=1489420 200 in 110ms (next.js: 4ms, application-code: 106ms)
+[browser] ========== SUPABASE ERROR ========== 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  23 |     if(result.error){
+  24 |
+> 25 |       console.error("========== SUPABASE ERROR ==========");
+     |               ^
+  26 |       console.error(result.error);
+  27 |
+  28 |     }else{ (lib/athena/signals/repositories/SignalRepository.ts:25:15)
+[browser] {
+  code: [32m''[39m,
+  details: [32m'TypeError: Failed to fetch\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6627:23\n'[39m +
+    [32m'    at https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6648:20\n'[39m +
+    [32m'    at Generator.next (<anonymous>)\n'[39m +
+    [32m'    at fulfilled (https://fuzzy-fishstick-x596qpxq6q4j2xqj-3000.app.github.dev/_next/static/chunks/node_modules_1ssqvd2._.js:6599:32)'[39m,
+  hint: [32m''[39m,
+  message: [32m'TypeError: Failed to fetch'[39m
+} 
+    at SignalRepository.save (lib/athena/signals/repositories/SignalRepository.ts:26:15)
+    at async LiveAnalysisController.analyzeFixture (lib/athena/v4/controllers/LiveAnalysisController.ts:89:5)
+  24 |
+  25 |       console.error("========== SUPABASE ERROR ==========");
+> 26 |       console.error(result.error);
+     |               ^
+  27 |
+  28 |     }else{
+  29 | (lib/athena/signals/repositories/SignalRepository.ts:26:15)

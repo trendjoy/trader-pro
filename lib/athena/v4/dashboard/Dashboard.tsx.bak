@@ -1,11 +1,8 @@
 "use client";
-import { useState } from "react";
 
 import Header from "./Header";
 import MainLayout from "./MainLayout";
 import Footer from "./Footer";
-
-import { MatchCenter } from "@/components/match-center/MatchCenter";
 
 import MatchCard from "../cards/MatchCard";
 import DominanceCard from "../cards/DominanceCard";
@@ -17,22 +14,30 @@ import ThreatCard from "../cards/ThreatCard";
 import TradingCard from "../cards/TradingCard";
 import CoachCard from "../cards/CoachCard";
 import TimelineCard from "../cards/TimelineCard";
+
 interface DashboardProps {
+
   analysis: any;
+
   fixture: any;
+
   fixtures: any[];
+
   onSelectFixture: (fixture: any) => void;
+
 }
 
 export default function Dashboard({
-  analysis,
-  fixture,
-  fixtures,
-  onSelectFixture,
-}: DashboardProps) {
 
-  const [openMatchCenter, setOpenMatchCenter] =
-    useState(false);
+  analysis,
+
+  fixture,
+
+  fixtures,
+
+  onSelectFixture,
+
+}: DashboardProps) {
 
   return (
 
@@ -49,31 +54,6 @@ export default function Dashboard({
         fixture={fixture}
         minute={analysis.minute}
       />
-
-      <div
-        style={{
-          display:"flex",
-          justifyContent:"flex-end",
-          margin:"20px 0",
-        }}
-      >
-
-        <button
-          onClick={() => setOpenMatchCenter(true)}
-          style={{
-            background:"#2563eb",
-            color:"white",
-            border:"none",
-            borderRadius:10,
-            padding:"12px 22px",
-            cursor:"pointer",
-            fontWeight:700,
-          }}
-        >
-          Abrir Match Center
-        </button>
-
-      </div>
 
       <MainLayout
         fixture={fixture}
@@ -148,13 +128,6 @@ export default function Dashboard({
         </div>
 
       </MainLayout>
-
-      <MatchCenter
-        open={openMatchCenter}
-        onClose={() => setOpenMatchCenter(false)}
-        fixture={fixture}
-        analysis={analysis}
-      />
 
       <Footer/>
 

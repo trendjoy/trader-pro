@@ -1,4 +1,5 @@
 import { MatchState } from "../models/MatchState";
+import { ScoreNormalizer } from "../core/ScoreNormalizer";
 
 import {
   ThreatLevel,
@@ -18,11 +19,15 @@ export interface TeamThreat {
 
 export class ThreatEngine {
 
+  private readonly normalizer =
+    new ScoreNormalizer();
+
+
   analyze(
     state: MatchState
   ): ThreatResult {
 
-    const homeScore =
+    const homeRaw =
       this.calculateThreat(
 
         state.home.possession,
@@ -39,7 +44,7 @@ export class ThreatEngine {
 
       );
 
-    const awayScore =
+    const awayRaw =
       this.calculateThreat(
 
         state.away.possession,
@@ -55,6 +60,18 @@ export class ThreatEngine {
         state.minute
 
       );
+
+    const normalized =
+      this.normalizer.normalize(
+        homeRaw,
+        awayRaw
+      );
+
+    const homeScore =
+      normalized.home;
+
+    const awayScore =
+      normalized.away;
 
     return {
 

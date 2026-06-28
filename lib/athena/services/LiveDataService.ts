@@ -1,6 +1,6 @@
-import { FootballProvider } from "../live/FootballProvider";
-import { FootballEventsClient } from "../live/FootballEventsClient";
-import { FootballStatisticsClient } from "../live/FootballStatisticsClient";
+import { FootballServerProvider } from "../live/FootballServerProvider";
+import { FootballServerEventsClient } from "../live/FootballServerEventsClient";
+import { FootballServerStatisticsClient } from "../live/FootballServerStatisticsClient";
 import { FootballStatisticsMapper } from "../live/FootballStatisticsMapper";
 import { MatchEventMapper } from "../live/MatchEventMapper";
 
@@ -9,16 +9,16 @@ import { LiveMatchData } from "../live/LiveMatchData";
 export class LiveDataService {
 
   private readonly provider =
-    new FootballProvider();
+    new FootballServerProvider();
 
   private readonly statisticsClient =
-    new FootballStatisticsClient();
+    new FootballServerStatisticsClient();
 
   private readonly statisticsMapper =
     new FootballStatisticsMapper();
 
   private readonly eventsClient =
-    new FootballEventsClient();
+    new FootballServerEventsClient();
 
   private readonly eventMapper =
     new MatchEventMapper();

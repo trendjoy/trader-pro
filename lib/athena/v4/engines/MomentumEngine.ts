@@ -1,5 +1,7 @@
 import { MatchState } from "../models/MatchState";
 
+import { ScoreNormalizer } from "../core/ScoreNormalizer";
+
 export enum MomentumLevel {
 
   STABLE = "STABLE",
@@ -32,11 +34,14 @@ export interface MomentumResult {
 
 export class MomentumEngine {
 
+  private readonly normalizer =
+    new ScoreNormalizer();
+
   analyze(
     state: MatchState
   ): MomentumResult {
 
-    const homeScore =
+    const homeRaw =
       this.calculateMomentum(
 
         state.home.possession,
@@ -53,7 +58,7 @@ export class MomentumEngine {
 
       );
 
-    const awayScore =
+    const awayRaw =
       this.calculateMomentum(
 
         state.away.possession,
@@ -69,6 +74,18 @@ export class MomentumEngine {
         state.minute
 
       );
+
+    const normalized =
+      this.normalizer.normalize(
+        homeRaw,
+        awayRaw
+      );
+
+    const homeScore =
+      normalized.home;
+
+    const awayScore =
+      normalized.away;
 
     return {
 
@@ -164,19 +181,10 @@ export class MomentumEngine {
 
     }
 
-    score =
-      Math.max(
-        0,
-        score
-      );
-
-    score =
-      Math.min(
-        100,
-        Math.round(score)
-      );
-
-    return score;
+    return Math.max(
+      0,
+      score
+    );
 
   }
 

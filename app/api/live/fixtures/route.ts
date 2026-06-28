@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 
+import { FixtureMapper } from "@/lib/athena/live/FixtureMapper";
+
+const mapper = new FixtureMapper();
+
 export async function GET() {
 
   const response = await fetch(
@@ -14,7 +18,11 @@ export async function GET() {
 
   const json = await response.json();
 
-  return NextResponse.json(json, {
+  const fixtures = json.response.map(
+    (item: any) => mapper.map(item)
+  );
+
+  return NextResponse.json(fixtures, {
     status: response.status,
   });
 

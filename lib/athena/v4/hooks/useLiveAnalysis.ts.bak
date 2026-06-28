@@ -3,15 +3,24 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
 import { Fixture } from "../../live/Fixture";
+
 import { MatchAnalysis } from "../models/MatchAnalysis";
+
+import { LiveAnalysisController } from "../controllers/LiveAnalysisController";
 
 const REFRESH_INTERVAL = 30000;
 
 export function useLiveAnalysis() {
+
+  const controller = useMemo(
+    () => new LiveAnalysisController(),
+    []
+  );
 
   const [loading, setLoading] =
     useState(true);
@@ -33,47 +42,42 @@ export function useLiveAnalysis() {
 
       try {
 
-        const response =
-          await fetch(
-            "/api/live/fixtures",
-            {
-              cache: "no-store",
-            }
-          );
-
-        if (!response.ok) {
-
-          throw new Error(
-            "Erro ao carregar fixtures."
-          );
-
-        }
-
         const data =
-          await response.json();
+          await controller.loadFixtures();
+
+        console.log("========== FIXTURES ==========");
+        console.log(data);
+        console.log("==============================");
 
         setFixtures(data);
 
-        setSelectedFixture(current =>
+        setSelectedFixture(current => {
 
-          !current
+          const selected =
+            !current
+              ? data[0] ?? null
+              : data.find(
+                  fixture =>
+                    fixture.id === current.id
+                ) ?? current;
 
-            ? data[0] ?? null
+          console.log("========== SELECTED ==========");
+          console.log(selected);
+          console.log("==============================");
 
-            : data.find(
-                (fixture: Fixture) =>
-                  fixture.id === current.id
-              ) ?? current
+          return selected;
 
-        );
+        });
 
       } catch (error) {
 
+        console.error("========== LOAD FIXTURES ERROR ==========");
         console.error(error);
+        console.error("=========================================");
 
       }
 
-    }, []);
+    }, [controller]);
 
   useEffect(() => {
 
@@ -92,39 +96,26 @@ export function useLiveAnalysis() {
 
     }
 
-    fetch(
-
-      `/api/live/analysis?fixture=${selectedFixture.id}`,
-
-      {
-        cache: "no-store",
-      }
-
-    )
-
-      .then(async response => {
-
-        if (!response.ok) {
-
-          throw new Error(
-            "Erro ao analisar partida."
-          );
-
-        }
-
-        return response.json();
-
-      })
-
+    controller
+      .analyzeFixture(
+        selectedFixture
+      )
       .then(result => {
+
+        console.log("ANALYSIS:", result);
 
         setAnalysis(result);
 
       })
+      .catch(error => {
 
-      .catch(console.error);
+        console.error("ANALYZE ERROR:", error);
+
+      });
 
   }, [
+
+    controller,
 
     selectedFixture,
 
@@ -139,41 +130,16 @@ export function useLiveAnalysis() {
     }
 
     const interval =
-
       setInterval(async () => {
 
         setRefreshing(true);
 
         try {
 
-          const response =
-
-            await fetch(
-
-              "/api/live/fixtures",
-
-              {
-
-                cache: "no-store",
-
-              }
-
-            );
-
-          const json =
-
-            await response.json();
-
           const updated =
-
-            json.response.find(
-
-              (fixture: Fixture) =>
-
-                fixture.id ===
-                selectedFixture.id
-
-            ) ?? null;
+            await controller.refreshFixture(
+              selectedFixture.id
+            );
 
           if (updated) {
 
@@ -196,6 +162,8 @@ export function useLiveAnalysis() {
 
   }, [
 
+    controller,
+
     selectedFixture,
 
   ]);
@@ -209,6 +177,11 @@ export function useLiveAnalysis() {
     );
 
   }
+
+console.log("========== ATHENA ==========");
+console.log("fixture:", selectedFixture);
+console.log("analysis:", analysis);
+console.log("============================");
 
   return {
 

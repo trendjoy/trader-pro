@@ -1,18 +1,14 @@
 import { Signal } from "../models/Signal";
-
 import { SignalRepository } from "../repositories/SignalRepository";
 
-export class SignalService{
+export class SignalService {
 
-  private repository=
-
+  private readonly repository =
     new SignalRepository();
 
   async emit(
-
-    signal:Signal
-
-  ){
+    signal: Signal
+  ) {
 
     return this.repository.save(
       signal
@@ -20,7 +16,7 @@ export class SignalService{
 
   }
 
-  async history(){
+  async history() {
 
     return this.repository.list();
 

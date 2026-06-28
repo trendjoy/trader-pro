@@ -1,7 +1,6 @@
 import { MatchState } from "../models/MatchState";
 import { FeatureExtractor } from "../features/FeatureExtractor";
 import { pressureModifier } from "../intelligence/PressureContext";
-import { ScoreNormalizer } from "../core/ScoreNormalizer";
 
 
 export enum PressureLevel {
@@ -39,9 +38,6 @@ export class PressureEngine {
   private readonly featureExtractor =
     new FeatureExtractor();
 
-  private readonly normalizer =
-    new ScoreNormalizer();
-
 
   analyze(
     state: MatchState
@@ -51,7 +47,7 @@ export class PressureEngine {
 
     const modifier = pressureModifier(features);
 
-    const homeRaw =
+    const homeScore =
       this.calculateScore(
 
         state.home.possession,
@@ -70,7 +66,7 @@ export class PressureEngine {
 
       );
 
-    const awayRaw =
+    const awayScore =
       this.calculateScore(
 
         state.away.possession,
@@ -88,18 +84,6 @@ export class PressureEngine {
         state.minute
 
       );
-
-    const normalized =
-      this.normalizer.normalize(
-        homeRaw,
-        awayRaw
-      );
-
-    const homeScore =
-      normalized.home;
-
-    const awayScore =
-      normalized.away;
 
     return {
 
@@ -195,10 +179,13 @@ export class PressureEngine {
         score
       );
 
-    return Math.max(
-      0,
-      score
-    );
+    score =
+      Math.min(
+        100,
+        Math.round(score)
+      );
+
+    return score;
 
   }
 

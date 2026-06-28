@@ -1,11 +1,31 @@
 "use client";
 
+import { Fixture } from "@/lib/athena/live/Fixture";
+import { MatchAnalysis } from "@/lib/athena/v4/models/MatchAnalysis";
+
+import MatchHeader from "./MatchHeader";
+import MatchStats from "./MatchStats";
+import PressurePanel from "./PressurePanel";
+import MomentumPanel from "./MomentumPanel";
+import ThreatPanel from "./ThreatPanel";
+import TradingPanel from "./TradingPanel";
+import Timeline from "./Timeline";
+
 type Props = {
   open: boolean;
   onClose: () => void;
+
+  fixture: Fixture;
+  analysis: MatchAnalysis;
 };
 
-export function MatchCenter({ open, onClose }: Props) {
+export function MatchCenter({
+  open,
+  onClose,
+  fixture,
+  analysis,
+}: Props) {
+
   if (!open) return null;
 
   return (
@@ -13,56 +33,73 @@ export function MatchCenter({ open, onClose }: Props) {
       <div
         onClick={onClose}
         style={{
-          position: "fixed",
-          inset: 0,
-          background: "rgba(0,0,0,.55)",
-          zIndex: 90,
+          position:"fixed",
+          inset:0,
+          background:"rgba(0,0,0,.55)",
+          zIndex:90,
         }}
       />
 
       <aside
         style={{
-          position: "fixed",
-          right: 0,
-          top: 0,
-          width: 520,
-          height: "100vh",
-          background: "#0b1220",
-          borderLeft: "1px solid #1e293b",
-          padding: 24,
-          overflowY: "auto",
-          zIndex: 100,
-          color: "white",
+          position:"fixed",
+          right:0,
+          top:0,
+          width:580,
+          height:"100vh",
+          background:"#0b1220",
+          borderLeft:"1px solid #1e293b",
+          overflowY:"auto",
+          padding:24,
+          zIndex:100,
+          color:"white",
         }}
       >
+
         <button
           onClick={onClose}
           style={{
-            float: "right",
-            cursor: "pointer",
+            float:"right",
+            cursor:"pointer",
+            border:"none",
+            background:"transparent",
+            color:"white",
+            fontSize:20,
           }}
         >
           ✕
         </button>
 
-        <h2>ATHENA Match Center</h2>
+        <MatchHeader
+          fixture={fixture}
+          analysis={analysis}
+        />
 
-        <hr />
+        <MatchStats
+          analysis={analysis}
+        />
 
-        <div style={{ marginTop: 20 }}>
-          <h3>Pressure</h3>
-          <p>Loading...</p>
+        <PressurePanel
+          analysis={analysis}
+        />
 
-          <h3>Momentum</h3>
-          <p>Loading...</p>
+        <MomentumPanel
+          analysis={analysis}
+        />
 
-          <h3>Goal Probability</h3>
-          <p>Loading...</p>
+        <ThreatPanel
+          analysis={analysis}
+        />
 
-          <h3>Decision</h3>
-          <p>Loading...</p>
-        </div>
+        <TradingPanel
+          analysis={analysis}
+        />
+
+        <Timeline/>
+
       </aside>
+
     </>
   );
+
 }
