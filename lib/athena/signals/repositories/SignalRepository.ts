@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/client";
+import { supabaseServer } from "@/lib/supabase/server";
 
 import { Signal } from "../models/Signal";
 
@@ -11,7 +11,7 @@ export class SignalRepository {
     console.log("========== SIGNAL ==========");
     console.dir(signal, { depth: null });
 
-    const result = await supabase
+    const result = await supabaseServer
 
       .from("signals")
 
@@ -73,7 +73,7 @@ export class SignalRepository {
 
   async list() {
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseServer
 
       .from("signals")
 
