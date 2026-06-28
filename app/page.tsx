@@ -1,1 +1,5 @@
-export { default } from "./v4/page";
+import { redirect } from "next/navigation";
+
+export default function Home() {
+  redirect("/v4");
+}
