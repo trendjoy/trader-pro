@@ -110,6 +110,9 @@ export class SignalRepository {
 
   async list(){
 
+    console.log("========== SIGNAL LIST ==========");
+    console.log("SUPABASE URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+
     const {data,error}=await supabaseServer
 
       .from("signals")
@@ -122,11 +125,11 @@ export class SignalRepository {
 
       });
 
-    if(error){
+    console.log("SIGNALS:");
+    console.dir(data,{depth:null});
 
-      console.error(error);
-
-    }
+    console.log("ERROR:");
+    console.dir(error,{depth:null});
 
     return data ?? [];
 
