@@ -1,59 +1,89 @@
-import { AthenaSignal } from "../models/AthenaSignal";
+import { Signal } from "../models/Signal";
 
 export class SignalEvaluator {
 
   evaluate(
-    signal: AthenaSignal,
+    signal: Signal,
     homeGoals: number,
     awayGoals: number
-  ): AthenaSignal {
+  ) {
 
-    if (signal.status !== "PENDING") {
-
-      return signal;
-
-    }
-
-    const totalGoals =
-      homeGoals + awayGoals;
-
-    let green = false;
+    let result = "VOID";
+    let profit = 0;
 
     switch (signal.market) {
 
-      case "OVER_05":
+      case "MATCH_ODDS":
 
-        green =
-          totalGoals >= 1;
+        if (signal.selection === "HOME") {
+
+          if (homeGoals > awayGoals) {
+
+            result = "GREEN";
+            profit = signal.odd
+              ? signal.odd - 1
+              : 1;
+
+          } else {
+
+            result = "RED";
+            profit = -signal.stake;
+
+          }
+
+        }
+
+        if (signal.selection === "AWAY") {
+
+          if (awayGoals > homeGoals) {
+
+            result = "GREEN";
+            profit = signal.odd
+              ? signal.odd - 1
+              : 1;
+
+          } else {
+
+            result = "RED";
+            profit = -signal.stake;
+
+          }
+
+        }
+
+        if (signal.selection === "DRAW") {
+
+          if (homeGoals === awayGoals) {
+
+            result = "GREEN";
+            profit = signal.odd
+              ? signal.odd - 1
+              : 1;
+
+          } else {
+
+            result = "RED";
+            profit = -signal.stake;
+
+          }
+
+        }
 
         break;
-
-      case "LAY_DRAW":
-
-        green =
-          homeGoals !== awayGoals;
-
-        break;
-
-      default:
-
-        return signal;
 
     }
 
     return {
 
-      ...signal,
+      result,
 
-      status:
-        green
-          ? "GREEN"
-          : "RED",
+      profit,
 
-      profit:
-        green
-          ? 1
-          : -1,
+      status: result,
+
+      final_score_home: homeGoals,
+
+      final_score_away: awayGoals,
 
     };
 

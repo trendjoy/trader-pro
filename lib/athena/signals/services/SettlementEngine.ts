@@ -1,10 +1,14 @@
 import { SignalRepository } from "../repositories/SignalRepository";
+import { SignalEvaluator } from "./SignalEvaluator";
 import { FootballServerFixtureClient } from "@/lib/athena/live/FootballServerFixtureClient";
 
 export class SettlementEngine {
 
   private readonly repository =
     new SignalRepository();
+
+  private readonly evaluator =
+    new SignalEvaluator();
 
   private readonly fixtureClient =
     new FootballServerFixtureClient();
@@ -16,8 +20,9 @@ export class SettlementEngine {
     const signals =
       await this.repository.listPending();
 
-    console.log("Pending signals:", signals.length);
-    console.dir(signals, { depth: null });
+    console.log(
+      `Pending signals: ${signals.length}`
+    );
 
     for (const signal of signals) {
 
@@ -44,11 +49,9 @@ export class SettlementEngine {
         `Status: ${fixture.fixture.status.short}`
       );
 
-      console.log(
-        `Score: ${fixture.goals.home} x ${fixture.goals.away}`
-      );
-
-      if (fixture.fixture.status.short !== "FT") {
+      if (
+        fixture.fixture.status.short !== "FT"
+      ) {
 
         console.log("Match not finished.");
 
@@ -56,11 +59,75 @@ export class SettlementEngine {
 
       }
 
-      console.log("READY FOR SETTLEMENT");
+      const settlement =
+        this.evaluator.evaluate(
+
+          {
+
+            fixtureId: signal.fixture_id,
+
+            league: signal.league,
+
+            home: signal.home,
+
+            away: signal.away,
+
+            minute: signal.minute,
+
+            market: signal.market,
+
+            action: signal.action,
+
+            selection: signal.selection,
+
+            confidence: signal.confidence,
+
+            stake: signal.stake,
+
+            odd: signal.odd,
+
+            status: signal.status,
+
+            result: signal.result,
+
+            profit: signal.profit,
+
+            analysis: signal.analysis,
+
+          },
+
+          fixture.goals.home,
+
+          fixture.goals.away
+
+        );
+
+      console.log(
+        "Settlement Result:"
+      );
+
+      console.dir(
+        settlement,
+        { depth: null }
+      );
+
+      await this.repository.updateSettlement(
+
+        signal.id,
+
+        settlement
+
+      );
+
+      console.log(
+        "Signal settled."
+      );
 
     }
 
-    console.log("SettlementEngine END");
+    console.log(
+      "SettlementEngine END"
+    );
 
   }
 

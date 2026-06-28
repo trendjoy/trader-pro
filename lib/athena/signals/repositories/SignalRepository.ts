@@ -110,7 +110,7 @@ export class SignalRepository {
 
   async list(){
 
-    const {data}=await supabaseServer
+    const {data,error}=await supabaseServer
 
       .from("signals")
 
@@ -122,19 +122,31 @@ export class SignalRepository {
 
       });
 
+    if(error){
+
+      console.error(error);
+
+    }
+
     return data ?? [];
 
   }
 
   async listPending(){
 
-    const {data}=await supabaseServer
+    const {data,error}=await supabaseServer
 
       .from("signals")
 
       .select("*")
 
       .eq("status","PENDING");
+
+    if(error){
+
+      console.error(error);
+
+    }
 
     return data ?? [];
 
@@ -145,19 +157,29 @@ export class SignalRepository {
     values:any
   ){
 
-    return supabaseServer
+    console.log("========== UPDATE ==========");
+    console.log(id);
+    console.dir(values,{depth:null});
 
+    const {data,error}=await supabaseServer
       .from("signals")
-
       .update({
-
         ...values,
-
         settled_at:new Date().toISOString(),
-
       })
+      .eq("id",id)
+      .select()
+      .single();
 
-      .eq("id",id);
+    if(error){
+      console.error("UPDATE ERROR");
+      console.error(error);
+    }else{
+      console.log("UPDATE OK");
+      console.dir(data,{depth:null});
+    }
+
+    return data;
 
   }
 
