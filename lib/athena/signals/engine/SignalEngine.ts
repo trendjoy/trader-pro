@@ -10,7 +10,7 @@ export class SignalEngine {
     signal: Signal
   ) {
 
-    if (signal.confidence < 0.70) {
+    if (signal.confidence < 0.00) {
 
       console.log(
         "SIGNAL REJECTED"

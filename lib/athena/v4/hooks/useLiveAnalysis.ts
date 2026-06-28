@@ -166,7 +166,7 @@ export function useLiveAnalysis() {
 
           const updated =
 
-            json.response.find(
+            (json.response ?? []).find(
 
               (fixture: Fixture) =>
 

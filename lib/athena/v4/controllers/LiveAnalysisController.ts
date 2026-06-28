@@ -130,10 +130,6 @@ export class LiveAnalysisController {
 
     });
 
-    console.log(
-      "SIGNAL SAVED"
-    );
-
     return analysis;
 
   }
