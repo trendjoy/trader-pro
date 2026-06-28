@@ -1,6 +1,7 @@
 "use client";
 
 import { useSignals } from "@/lib/athena/signals/hooks/useSignals";
+import ActionBar from "@/components/athena/ActionBar";
 
 export default function SignalsPage() {
 
@@ -30,6 +31,9 @@ export default function SignalsPage() {
       >
         ATHENA SIGNAL CENTER
       </h1>
+
+      <ActionBar />
+
 
       <div
         style={{

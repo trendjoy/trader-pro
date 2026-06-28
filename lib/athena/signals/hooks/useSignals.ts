@@ -1,16 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-
-import { SignalService } from "../services/SignalService";
 import { SignalStatistics } from "../services/SignalStatistics";
 
 export function useSignals() {
-
-  const service = useMemo(
-    () => new SignalService(),
-    []
-  );
 
   const statistics = useMemo(
     () => new SignalStatistics(),
@@ -21,21 +14,18 @@ export function useSignals() {
 
   useEffect(() => {
 
-    service
-      .history()
+    fetch("/api/signals")
+      .then((response) => response.json())
       .then(setSignals)
       .catch(console.error);
 
-  }, [service]);
+  }, []);
 
   const summary = statistics.summary();
 
   return {
-
     signals,
-
     summary,
-
   };
 
 }

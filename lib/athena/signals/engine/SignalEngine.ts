@@ -10,11 +10,9 @@ export class SignalEngine {
     signal: Signal
   ) {
 
-    if (signal.confidence < 0.00) {
+    if (signal.action === "NONE") {
 
-      console.log(
-        "SIGNAL REJECTED"
-      );
+      console.log("SIGNAL WAIT");
 
       return;
 

@@ -6,6 +6,7 @@ import MainLayout from "./MainLayout";
 import Footer from "./Footer";
 
 import { MatchCenter } from "@/components/match-center/MatchCenter";
+import ActionBar from "@/components/athena/ActionBar";
 
 import MatchCard from "../cards/MatchCard";
 import DominanceCard from "../cards/DominanceCard";
@@ -23,6 +24,16 @@ interface DashboardProps {
   fixtures: any[];
   onSelectFixture: (fixture: any) => void;
 }
+
+const actionButton = {
+  background:"#2563eb",
+  color:"white",
+  border:"none",
+  borderRadius:10,
+  padding:"12px 22px",
+  cursor:"pointer",
+  fontWeight:700,
+} as const;
 
 export default function Dashboard({
   analysis,
@@ -50,30 +61,11 @@ export default function Dashboard({
         minute={analysis.minute}
       />
 
-      <div
-        style={{
-          display:"flex",
-          justifyContent:"flex-end",
-          margin:"20px 0",
-        }}
-      >
+      
+<ActionBar
+  onOpenMatchCenter={() => setOpenMatchCenter(true)}
+/>
 
-        <button
-          onClick={() => setOpenMatchCenter(true)}
-          style={{
-            background:"#2563eb",
-            color:"white",
-            border:"none",
-            borderRadius:10,
-            padding:"12px 22px",
-            cursor:"pointer",
-            fontWeight:700,
-          }}
-        >
-          Abrir Match Center
-        </button>
-
-      </div>
 
       <MainLayout
         fixture={fixture}
